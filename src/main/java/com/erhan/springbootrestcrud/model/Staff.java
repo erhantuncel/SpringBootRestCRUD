@@ -82,13 +82,12 @@ public class Staff {
 	public Staff(@NotEmpty @NotNull @Size(max = 40) String firstName,
 			@NotEmpty @NotNull @Size(max = 40) String lastName,
 			@NotEmpty @NotNull @Size(max = 10) @Pattern(regexp = "[0-9]{10}", message = "{validation.phone.size.ten}") String phone,
-			@Email @Size(max = 40) String email, byte[] image, @NotNull Date createDate, Department department) {
+			@Email @Size(max = 40) String email, @NotNull Date createDate, Department department) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phone = phone;
 		this.email = email;
-		this.image = image;
 		this.createDate = createDate;
 		this.department = department;
 	}

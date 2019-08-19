@@ -46,7 +46,8 @@ public class StaffDAOTest {
 		Department department1 = departmentDAO.findById(1L).orElse(null);
 		assertNotNull(department1);
 
-		Staff staff = new Staff("Ahmet", "ÇALIŞKAN", "1231231231", "ahmet@abc.com", getByteArrayOfTestImage("man1.png"), new Date(), department1);
+		Staff staff = new Staff("Ahmet", "ÇALIŞKAN", "1231231231", "ahmet@abc.com", new Date(), department1);
+		staff.setImage(getByteArrayOfTestImage("man1.png"));
 		staffDAO.save(staff);
 		department1.getStaffList().add(staff);
 		departmentDAO.save(department1);
