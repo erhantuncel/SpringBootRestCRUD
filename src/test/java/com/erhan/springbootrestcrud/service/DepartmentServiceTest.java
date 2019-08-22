@@ -6,9 +6,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.erhan.springbootrestcrud.dao.DepartmentDAO;
+import com.erhan.springbootrestcrud.dto.DepartmentDTO;
 import com.erhan.springbootrestcrud.model.Department;
+import com.erhan.springbootrestcrud.model.PageForClient;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class DepartmentServiceTest {
@@ -33,21 +38,33 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 	@Mock
 	Page<Department> mockPageDepartment;
 	
+	@Mock
+	ModelMapper mockModelMapper;
+	
 	@InjectMocks
 	DepartmentServiceImpl departmentService;
 	
+	private DepartmentDTO departmentDTO;
 	private Department department;
+	private DepartmentDTO[] departmentDTOArray;
 	
 	@Before
 	public void setUp() {
 		department = new Department("Üretim");
+		departmentDTO = new DepartmentDTO();
+		departmentDTO.setDepartmentName("Üretim");
+		departmentDTOArray = new DepartmentDTO[] {new DepartmentDTO("Üretim"), 
+				  new DepartmentDTO("Finans")};
 	}
 	
 	@Test
 	public void testCreate() {
 		logger.info("testCreate is started.");
 		
-		departmentService.create(department);
+		when(mockModelMapper.map(departmentDTO, Department.class)).thenReturn(department);
+		
+		DepartmentDTO departmentDTOFromDB = departmentService.create(departmentDTO);
+		assertEquals(departmentDTOFromDB, departmentDTO);
 		
 		verify(mockDepartmentDAO, times(1)).save(any(Department.class));
 		
@@ -58,7 +75,11 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 	public void testUpdate() {
 		logger.info("testUpdate is started.");
 		
-		departmentService.update(department);
+		when(mockModelMapper.map(departmentDTO, Department.class)).thenReturn(department);
+		when(mockModelMapper.map(department, DepartmentDTO.class)).thenReturn(departmentDTO);
+		
+		DepartmentDTO departmentDTOUpdated = departmentService.update(departmentDTO);
+		assertEquals(departmentDTOUpdated, departmentDTO);
 		
 		verify(mockDepartmentDAO, times(1)).save(any(Department.class));
 		
@@ -69,7 +90,9 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 	public void testRemove() {
 		logger.info("testRemove is started.");
 		
-		departmentService.remove(department);
+		when(mockModelMapper.map(departmentDTO, Department.class)).thenReturn(department);
+		
+		departmentService.remove(departmentDTO);
 		
 		verify(mockDepartmentDAO, times(1)).delete(any(Department.class));
 		
@@ -92,10 +115,11 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 		logger.info("testFindById is started.");
 		
 		when(mockDepartmentDAO.findById(2L)).thenReturn(Optional.of(department));
+		when(mockModelMapper.map(department, DepartmentDTO.class)).thenReturn(departmentDTO);
 		
-		Department findById = departmentService.findById(2L);
+		DepartmentDTO findById = departmentService.findById(2L);
 		assertNotNull(findById);
-		assertEquals(findById.getDepartmentName(), department.getDepartmentName());
+		assertEquals(findById.getDepartmentName(), departmentDTO.getDepartmentName());
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		
@@ -108,11 +132,12 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 		
 		List<Department> departmentList = new ArrayList<Department>();
 		departmentList.add(new Department("Üretim"));
-		departmentList.add(new Department("Finans"));
+		departmentList.add(new Department("Finans")); 
 		
 		when(mockDepartmentDAO.findAll()).thenReturn(departmentList);
+		when(mockModelMapper.map(departmentList, DepartmentDTO[].class)).thenReturn(departmentDTOArray);
 		
-		List<Department> findAll = departmentService.findAll();
+		List<DepartmentDTO> findAll = departmentService.findAll();
 		assertNotNull(findAll);
 		assertEquals(findAll.size(), 2);
 		assertEquals(findAll.get(0).getDepartmentName(), "Üretim");
@@ -127,8 +152,9 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 		logger.info("testFindByDepartmentName is started.");
 				
 		when(mockDepartmentDAO.findFirstByDepartmentName(anyString())).thenReturn(department);
+		when(mockModelMapper.map(department, DepartmentDTO.class)).thenReturn(departmentDTO);
 		
-		Department findByDepartmentName = departmentService.findByDepartmentName("Üretim");
+		DepartmentDTO findByDepartmentName = departmentService.findByDepartmentName("Üretim");
 		assertNotNull(findByDepartmentName);
 		assertEquals(findByDepartmentName.getDepartmentName(), "Üretim");
 		
@@ -143,14 +169,16 @@ private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceTe
 		
 		List<Department> departmentList = new ArrayList<Department>();
 		departmentList.add(new Department("Üretim"));
-		departmentList.add(new Department("Finans"));;
+		departmentList.add(new Department("Finans"));
 		
 		when(mockDepartmentDAO.findAll(any(Pageable.class))).thenReturn(mockPageDepartment);
-		when(mockPageDepartment.getContent()).thenReturn(departmentList);
+		when(mockPageDepartment.getContent()).thenReturn(departmentList);	
+		when(mockModelMapper.map(departmentList, DepartmentDTO[].class)).thenReturn(departmentDTOArray);
 		
-		List<Department> allDepartmentsPaginated = departmentService.findAllPaginated(0, 2);
-		assertNotNull(allDepartmentsPaginated);
-		assertEquals(allDepartmentsPaginated.get(0).getDepartmentName(), "Üretim");
+		PageForClient<DepartmentDTO> pageForClient = departmentService.findAllPaginated(PageRequest.of(0, 2));
+		assertNotNull(pageForClient);
+		assertEquals(pageForClient.getContent().size(), 2);
+		assertEquals(pageForClient.getContent().get(0).getDepartmentName(), "Üretim");
 		
 		verify(mockDepartmentDAO, times(1)).findAll(any(Pageable.class));
 		verify(mockPageDepartment, times(1)).getContent();

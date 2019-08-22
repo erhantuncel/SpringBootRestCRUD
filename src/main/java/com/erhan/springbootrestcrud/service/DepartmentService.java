@@ -2,16 +2,19 @@ package com.erhan.springbootrestcrud.service;
 
 import java.util.List;
 
-import com.erhan.springbootrestcrud.model.Department;
+import org.springframework.data.domain.Pageable;
+
+import com.erhan.springbootrestcrud.dto.DepartmentDTO;
+import com.erhan.springbootrestcrud.model.PageForClient;
 
 public interface DepartmentService {
 
-	public void create(Department department);
-	public void update(Department department);
-	public void remove(Department department);
+	public DepartmentDTO create(DepartmentDTO department);
+	public DepartmentDTO update(DepartmentDTO department);
+	public void remove(DepartmentDTO department);
 	public void removeById(Long id);
-	public Department findById(Long id);
-	public List<Department> findAll();
-	public Department findByDepartmentName(String name);
-	public List<Department> findAllPaginated(int page, int pageSize);
+	public DepartmentDTO findById(Long id);
+	public List<DepartmentDTO> findAll();
+	public DepartmentDTO findByDepartmentName(String name);
+	public PageForClient<DepartmentDTO> findAllPaginated(Pageable pageable);
 }
