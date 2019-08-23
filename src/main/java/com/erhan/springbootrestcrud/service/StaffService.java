@@ -5,37 +5,41 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.erhan.springbootrestcrud.model.Department;
-import com.erhan.springbootrestcrud.model.Staff;
+import org.springframework.data.domain.Pageable;
+
+import com.erhan.springbootrestcrud.dto.DepartmentDTO;
+import com.erhan.springbootrestcrud.dto.StaffDTO;
+import com.erhan.springbootrestcrud.model.PageForClient;
 
 import javassist.NotFoundException;
 
 public interface StaffService {
 
-	public void create(Staff staff);
-	public void createWithDepartmentId(Staff staff, Long departmentId) throws NotFoundException;
-	public void update(Staff staff);
-	public void updateWithDepartmentId(Long staffId, Long departmentId, Staff staff) throws NotFoundException, IllegalArgumentException;
-	public void remove(Staff staff);
+	public StaffDTO create(StaffDTO staff);
+	public StaffDTO createWithDepartmentId(StaffDTO staff, Long departmentId) throws NotFoundException;
+	public StaffDTO update(StaffDTO staff);
+	public StaffDTO updateWithDepartmentId(Long staffId, Long departmentId, StaffDTO staff) throws NotFoundException, IllegalArgumentException;
+	public void remove(StaffDTO staff);
 	public void removeWithDepartmentId(Long staffId, Long departmentId) throws NotFoundException, IllegalArgumentException;
-	public Staff findById(Long id) throws NotFoundException;
-	public List<Staff> findAll();
-	public List<Staff> findAllPaginated(int page, int pageSize) throws NotFoundException;
-	public List<Staff> findByFirstName(String firstName) throws NotFoundException;
-	public List<Staff> findByLastName(String lastName) throws NotFoundException;
-	public List<Staff> findByPhone(String phone) throws NotFoundException;
-	public List<Staff> findByEmail(String email) throws NotFoundException;
-	public List<Staff> findByCreateDate(Date createDate) throws NotFoundException;
-	public List<Staff> findByDepartment(Department department) throws NotFoundException;
-	public List<Staff> findByDepartmentId(Long id) throws NotFoundException;
-	public List<Staff> findByDepartmentIdPaginated(Long id, int page, int pageSize) throws NotFoundException;
-	public Staff findByIdAndDepartmentId(Long staffId, Long departmentId) throws NotFoundException;
-	public List<Staff> findByFirstNameAndDepartmentId(String firstName, Long departmentId) throws NotFoundException;
-	public List<Staff> findByFirstNameAndDepartmentIdPaginated(String firstName, Long departmentId, int page, int pageSize) throws NotFoundException;
-	public List<Staff> findByLastNameAndDepartmentId(String lastName, Long departmentId) throws NotFoundException;
-	public List<Staff> findByLastNameAndDepartmentIdPaginated(String lastName, Long departmentId, int page, int pageSize) throws NotFoundException;
-	public List<Staff> findByPhoneAndDepartmentId(String phone, Long departmentId)  throws NotFoundException;
-	public List<Staff> findByEmailAndDepartmentId(String email, Long departmentId) throws NotFoundException;
-	public List<Staff> findByCreateDateAndDepartmentId(Date createDate, Long departmentId) throws NotFoundException;
-	public List<Staff> findByDepartmentIdAndQueryParameters(Long departmentId, Map<String, String> queryParameters) throws NotFoundException, IllegalArgumentException, ParseException;
+	public StaffDTO findById(Long id) throws NotFoundException;
+	public List<StaffDTO> findAll();
+	public PageForClient<StaffDTO> findAllPaginated(Pageable pageable) throws NotFoundException;
+	public List<StaffDTO> findByFirstName(String firstName) throws NotFoundException;
+	public List<StaffDTO> findByLastName(String lastName) throws NotFoundException;
+	public List<StaffDTO> findByPhone(String phone) throws NotFoundException;
+	public List<StaffDTO> findByEmail(String email) throws NotFoundException;
+	public List<StaffDTO> findByCreateDate(Date createDate) throws NotFoundException;
+	public List<StaffDTO> findByDepartment(DepartmentDTO department) throws NotFoundException;
+	public List<StaffDTO> findByDepartmentId(Long id) throws NotFoundException;
+	public PageForClient<StaffDTO> findByDepartmentIdPaginated(Long id, Pageable pageable) throws NotFoundException;
+	public StaffDTO findByIdAndDepartmentId(Long staffId, Long departmentId) throws NotFoundException;
+	public List<StaffDTO> findByFirstNameAndDepartmentId(String firstName, Long departmentId) throws NotFoundException;
+	public PageForClient<StaffDTO> findByFirstNameAndDepartmentIdPaginated(String firstName, Long departmentId, Pageable pageable) throws NotFoundException;
+	public List<StaffDTO> findByLastNameAndDepartmentId(String lastName, Long departmentId) throws NotFoundException;
+	public PageForClient<StaffDTO> findByLastNameAndDepartmentIdPaginated(String lastName, Long departmentId, Pageable pageable) throws NotFoundException;
+	public List<StaffDTO> findByPhoneAndDepartmentId(String phone, Long departmentId)  throws NotFoundException;
+	public List<StaffDTO> findByEmailAndDepartmentId(String email, Long departmentId) throws NotFoundException;
+	public List<StaffDTO> findByCreateDateAndDepartmentId(Date createDate, Long departmentId) throws NotFoundException;
+	public List<StaffDTO> findByDepartmentIdAndQueryParameters(Long departmentId, Map<String, String> queryParameters) throws NotFoundException, IllegalArgumentException, ParseException;
+	public PageForClient<StaffDTO> findByDepartmentIdAndQueryParametersPaginated(Long departmentId, Map<String, String> queryParameters, Pageable pageable) throws NotFoundException, IllegalArgumentException, ParseException;
 }

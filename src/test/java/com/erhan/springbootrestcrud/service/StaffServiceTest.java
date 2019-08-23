@@ -11,9 +11,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +24,10 @@ import static org.mockito.Mockito.*;
 
 import com.erhan.springbootrestcrud.dao.DepartmentDAO;
 import com.erhan.springbootrestcrud.dao.StaffDAO;
+import com.erhan.springbootrestcrud.dto.DepartmentDTO;
+import com.erhan.springbootrestcrud.dto.StaffDTO;
 import com.erhan.springbootrestcrud.model.Department;
+import com.erhan.springbootrestcrud.model.PageForClient;
 import com.erhan.springbootrestcrud.model.Staff;
 
 import javassist.NotFoundException;
@@ -41,32 +46,62 @@ public class StaffServiceTest {
 	@Mock
 	Page<Staff> mockPageStaff;
 	
+	@Mock
+	ModelMapper mockModelMapper;
+	
 	@InjectMocks
 	StaffServiceImpl staffService;
 	
 	private Staff staff;
+	private StaffDTO staffDTO;
 	private Department department;
+	private DepartmentDTO departmentDTO;
 	private List<Staff> staffList;
+	private List<StaffDTO> staffDTOList;
+	private StaffDTO[] staffDTOArray;
 	
 	@Before
 	public void setUp() {
 		department = new Department("Üretim");
 		department.setId(1L);
-		staff = new Staff("Mehmet", "ÇALIŞKAN", "1231231231", "mehmet@abc.com", new Date(), department);
+		departmentDTO = new DepartmentDTO("Üretim");
+		departmentDTO.setId(1L);
+		
+		Date dateForFirstStaff = new Date();
+		staff = new Staff("Mehmet", "ÇALIŞKAN", "1231231231", "mehmet@abc.com", dateForFirstStaff, department);
 		staff.setId(1L);
+		staffDTO = new StaffDTO("Mehmet", "ÇALIŞKAN", "1231231231", "mehmet@abc.com", dateForFirstStaff, departmentDTO);
+		staffDTO.setId(1L);
+		
 		staffList = new ArrayList<Staff>();
+		staffDTOList = new ArrayList<StaffDTO>();
+		
 		staffList.add(staff);
-		Staff staff2 = new Staff("Ahmet", "TEMBEL", "9879879879", "ahmet@abc.com", new Date(), department);
+		staffDTOList.add(staffDTO);
+		Date dateForSecondStaff = new Date();
+		Staff staff2 = new Staff("Ahmet", "TEMBEL", "9879879879", "ahmet@abc.com", dateForSecondStaff, department);
+		staff2.setId(2L);
+		StaffDTO staffDTO2 = new StaffDTO("Ahmet", "TEMBEL", "9879879879", "ahmet@abc.com", dateForSecondStaff, departmentDTO);
 		staff2.setId(2L);
 		staffList.add(staff2);
+		staffDTOList.add(staffDTO2);
+		
 		department.getStaffList().add(staff);
+		
+		staffDTOArray = new StaffDTO[] {
+				new StaffDTO("Mehmet", "ÇALIŞKAN", "1231231231", "mehmet@abc.com", dateForFirstStaff, departmentDTO),
+				new StaffDTO("Ahmet", "TEMBEL", "9879879879", "ahmet@abc.com", dateForSecondStaff, departmentDTO)
+		};
 	}
 	
 	@Test
 	public void testCreate() {
 		logger.info("testCreate is started.");
 		
-		staffService.create(staff);
+		when(mockModelMapper.map(staffDTO, Staff.class)).thenReturn(staff);
+		
+		StaffDTO staffDTOFromDB = staffService.create(staffDTO);
+		assertEquals(staffDTOFromDB, staffDTO);
 		
 		verify(mockStaffDAO, times(1)).save(any(Staff.class));
 		
@@ -78,12 +113,18 @@ public class StaffServiceTest {
 		logger.info("testCreateWithDepartmentId is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
+		when(mockModelMapper.map(department, DepartmentDTO.class)).thenReturn(departmentDTO);
+		when(mockModelMapper.map(staffDTO, Staff.class)).thenReturn(staff);
+		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		staffService.createWithDepartmentId(staff, 2L);
+		staffService.createWithDepartmentId(staffDTO, 2L);
 		assertEquals(staff.getDepartment(), department);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		verify(mockStaffDAO, times(1)).save(any(Staff.class));
+		verify(mockModelMapper, times(1)).map(department, DepartmentDTO.class);
+		verify(mockModelMapper, times(1)).map(staffDTO, Staff.class);
+		verify(mockModelMapper, times(1)).map(staff, StaffDTO.class);
 		
 		logger.info("testCreateWithDepartmentId is successful.");
 	}
@@ -93,7 +134,7 @@ public class StaffServiceTest {
 		logger.info("testCreateWithDepartmentIdWithException is started.");
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.empty());
 		
-		staffService.createWithDepartmentId(staff, 2L);
+		staffService.createWithDepartmentId(staffDTO, 2L);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		
@@ -104,9 +145,14 @@ public class StaffServiceTest {
 	public void testUpdate() {
 		logger.info("testUpdate is started.");
 		
-		staffService.update(staff);
+		when(mockModelMapper.map(staffDTO, Staff.class)).thenReturn(staff);
+		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
+		
+		staffService.update(staffDTO);
 		
 		verify(mockStaffDAO, times(1)).save(any(Staff.class));
+		verify(mockModelMapper, times(1)).map(staffDTO, Staff.class);
+		verify(mockModelMapper, times(1)).map(staff, StaffDTO.class);
 		
 		logger.info("testUpdate is successful.");
 	}
@@ -115,14 +161,21 @@ public class StaffServiceTest {
 	public void testUpdateWithDepartmentId() throws IllegalArgumentException, NotFoundException {
 		logger.info("testUpdateWithDepartmentId is started.");
 		
+		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
+		StaffDTO staffUpdateDTO = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
+		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
 		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.of(staff));
+		when(mockModelMapper.map(staffUpdateDTO, Staff.class)).thenReturn(staffUpdate);
+		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
-		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
+		staffService.updateWithDepartmentId(1L, 1L, staffUpdateDTO);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		verify(mockStaffDAO, times(1)).findById(anyLong());
+		verify(mockModelMapper, times(1)).map(staffUpdateDTO, Staff.class);
+		verify(mockModelMapper, times(1)).map(staff, StaffDTO.class);
+		
 		assertEquals(staff.getPhone(), staffUpdate.getPhone());
 		assertEquals(staff.getEmail(), staffUpdate.getEmail());
 		
@@ -134,9 +187,8 @@ public class StaffServiceTest {
 		logger.info("testUpdateWithDepartmentIdWithNotFoundDepartment is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.empty());
-		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.of(staff));
 		
-		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
+		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
 		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
@@ -151,7 +203,7 @@ public class StaffServiceTest {
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
 		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.empty());
 		
-		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
+		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
 		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
@@ -169,7 +221,7 @@ public class StaffServiceTest {
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
 		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.of(unknownStaff));
 		
-		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
+		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
 		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
@@ -182,9 +234,12 @@ public class StaffServiceTest {
 	public void testRemove() {
 		logger.info("testRemove is started.");
 		
-		staffService.remove(staff);
+		when(mockModelMapper.map(staffDTO, Staff.class)).thenReturn(staff);
+		
+		staffService.remove(staffDTO);
 		
 		verify(mockStaffDAO, times(1)).delete(any(Staff.class));
+		verify(mockModelMapper, times(1)).map(staffDTO, Staff.class);
 		
 		logger.info("testRemove is successful.");
 	}
@@ -210,13 +265,10 @@ public class StaffServiceTest {
 		logger.info("testRemoveWithDepartmentIdWithNotFoundDepartment is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.empty());
-		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.of(staff));
 		
 		staffService.removeWithDepartmentId(1L, 1L);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
-		verify(mockStaffDAO, times(1)).findById(anyLong());
-		verify(mockDepartmentDAO, times(1)).save(any(Department.class));
 		
 		logger.info("testRemoveWithDepartmentIdWithNotFoundDepartment is successful.");
 	}
@@ -260,11 +312,13 @@ public class StaffServiceTest {
 		logger.info("testFindById is started.");
 		
 		when(mockStaffDAO.findById(2L)).thenReturn(Optional.of(staff));
+		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		Staff findById = staffService.findById(2L);
-		makeAssertionOverStaffList(findById, staffList.get(0));
+		StaffDTO findById = staffService.findById(2L);
+		makeAssertionOverStaffList(findById, staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findById(anyLong());
+		verify(mockModelMapper, times(1)).map(staff, StaffDTO.class);
 		
 		logger.info("testFindById is successful.");
 	}
@@ -285,9 +339,10 @@ public class StaffServiceTest {
 		logger.info("testFindAll is started.");
 		
 		when(mockStaffDAO.findAll()).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> allStaffs = staffService.findAll();
-		makeAssertionOverStaffList(allStaffs.get(0), staffList.get(0));
+		List<StaffDTO> allStaffs = staffService.findAll();
+		makeAssertionOverStaffList(allStaffs.get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findAll();
 		
@@ -299,13 +354,17 @@ public class StaffServiceTest {
 		logger.info("testFindAllPaginated is started.");
 		
 		when(mockStaffDAO.findAll(any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(false);
 		when(mockPageStaff.getContent()).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> allStaffs = staffService.findAllPaginated(1, 2);
-		makeAssertionOverStaffList(allStaffs.get(0), staffList.get(0));
+		PageForClient<StaffDTO> allStaffs = staffService.findAllPaginated(PageRequest.of(1, 2));
+		makeAssertionOverStaffList(allStaffs.getContent().get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findAll(any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
 		verify(mockPageStaff, times(1)).getContent();
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindAllPaginated is successful.");
 	}
@@ -315,9 +374,12 @@ public class StaffServiceTest {
 		logger.info("testFindAllPaginatedWithException is started.");
 		
 		when(mockStaffDAO.findAll(any(Pageable.class))).thenReturn(mockPageStaff);
-		when(mockPageStaff.getContent()).thenReturn(new ArrayList<Staff>());
+		when(mockPageStaff.isEmpty()).thenReturn(true);
 		
-		staffService.findAllPaginated(1, 2);
+		staffService.findAllPaginated(PageRequest.of(1, 2));
+		
+		verify(mockStaffDAO, times(1)).findAll(any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
 		
 		logger.info("testFindAllPaginatedWithException is successful.");
 	}
@@ -327,11 +389,13 @@ public class StaffServiceTest {
 		logger.info("testFindByFirstName is started.");
 		
 		when(mockStaffDAO.findByFirstName(anyString())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByFirstName = staffService.findByFirstName("Ahmet");
-		makeAssertionOverStaffList(findByFirstName.get(0), staffList.get(0));
+		List<StaffDTO> findByFirstName = staffService.findByFirstName("Ahmet");
+		makeAssertionOverStaffList(findByFirstName.get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findByFirstName(anyString());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByFirstName is successful.");
 	}
@@ -354,11 +418,13 @@ public class StaffServiceTest {
 		logger.info("testFindByLastName is started.");
 		
 		when(mockStaffDAO.findByLastName(anyString())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByLastName = staffService.findByLastName("TEMBEL");
-		makeAssertionOverStaffList(findByLastName.get(0), staffList.get(0));
+		List<StaffDTO> findByLastName = staffService.findByLastName("TEMBEL");
+		makeAssertionOverStaffList(findByLastName.get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findByLastName(anyString());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByLastName is successful.");
 	}
@@ -381,11 +447,13 @@ public class StaffServiceTest {
 		logger.info("testFindByPhone is started.");
 		
 		when(mockStaffDAO.findByPhone(anyString())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByPhone = staffService.findByPhone("9879879879");
-		makeAssertionOverStaffList(findByPhone.get(0), staffList.get(0));
+		List<StaffDTO> findByPhone = staffService.findByPhone("9879879879");
+		makeAssertionOverStaffList(findByPhone.get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findByPhone(anyString());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByPhone is successful.");
 	}
@@ -408,11 +476,13 @@ public class StaffServiceTest {
 		logger.info("testFindByEmail is started.");
 		
 		when(mockStaffDAO.findByEmail(anyString())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByEmail = staffService.findByEmail("ahmet@abc.com");
-		makeAssertionOverStaffList(findByEmail.get(0), staffList.get(0));
+		List<StaffDTO> findByEmail = staffService.findByEmail("ahmet@abc.com");
+		makeAssertionOverStaffList(findByEmail.get(0), staffDTOList.get(0));
 		
 		verify(mockStaffDAO, times(1)).findByEmail(anyString());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByEmail is successful.");
 	}
@@ -435,11 +505,13 @@ public class StaffServiceTest {
 		logger.info("testFindByRegisteredTime is started.");
 		
 		when(mockStaffDAO.findByCreateDate(any(Date.class))).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByRegisteredTime = staffService.findByCreateDate(staffList.get(0).getCreateDate());
+		List<StaffDTO> findByRegisteredTime = staffService.findByCreateDate(staffList.get(0).getCreateDate());
 		
-		makeAssertionOverStaffList(findByRegisteredTime.get(0), staffList.get(0));
+		makeAssertionOverStaffList(findByRegisteredTime.get(0), staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByCreateDate(any(Date.class));
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByRegisteredTime is successful.");
 	}
@@ -462,11 +534,15 @@ public class StaffServiceTest {
 		logger.info("testFindByDepartment is started.");
 		
 		when(mockStaffDAO.findByDepartment(any(Department.class))).thenReturn(staffList);
+		when(mockModelMapper.map(departmentDTO, Department.class)).thenReturn(department);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByDepartment = staffService.findByDepartment(staffList.get(0).getDepartment());
+		List<StaffDTO> findByDepartment = staffService.findByDepartment(staffDTOList.get(0).getDepartment());
 		
-		makeAssertionOverStaffList(findByDepartment.get(0), staffList.get(0));
+		makeAssertionOverStaffList(findByDepartment.get(0), staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByDepartment(any(Department.class));
+		verify(mockModelMapper, times(1)).map(departmentDTO, Department.class);
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByDepartment is successful.");
 	}
@@ -475,9 +551,10 @@ public class StaffServiceTest {
 	public void testFindByDepartmentWithNotFoundException() throws NotFoundException {
 		logger.info("testFindByDepartment is started.");
 		
+		when(mockModelMapper.map(departmentDTO, Department.class)).thenReturn(department);
 		when(mockStaffDAO.findByDepartment(any(Department.class))).thenReturn(new ArrayList<>());
 		
-		staffService.findByDepartment(staffList.get(0).getDepartment());
+		staffService.findByDepartment(staffDTOList.get(0).getDepartment());
 		
 		verify(mockStaffDAO, times(1)).findByDepartment(any(Department.class));
 		
@@ -489,12 +566,13 @@ public class StaffServiceTest {
 		logger.info("testFindByDepartmentId is started.");
 		
 		when(mockStaffDAO.findByDepartment_Id(any(Long.class))).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByDepartment_Id = staffService.findByDepartmentId(staffList.get(0).getDepartment().getId());
+		List<StaffDTO> findByDepartment_Id = staffService.findByDepartmentId(staffList.get(0).getDepartment().getId());
 		
-		makeAssertionOverStaffList(findByDepartment_Id.get(0), staffList.get(0));
+		makeAssertionOverStaffList(findByDepartment_Id.get(0), staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByDepartment_Id(any(Long.class));
-		
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		logger.info("testFindByDepartmentId is successful.");
 	}
 	
@@ -515,13 +593,19 @@ public class StaffServiceTest {
 	public void testFindByDepartmentIdPaginated() throws NotFoundException {
 		logger.info("testFindByDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByDepartment_Id(anyLong(), any(Pageable.class))).thenReturn(staffList);
+		when(mockStaffDAO.findByDepartment_Id(anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(false);
+		when(mockPageStaff.getContent()).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByDepartment_IdPaginated = staffService
-				.findByDepartmentIdPaginated(staffList.get(0).getDepartment().getId(), 0, 2);
+		PageForClient<StaffDTO> findByDepartment_IdPaginated = staffService
+				.findByDepartmentIdPaginated(staffList.get(0).getDepartment().getId(), PageRequest.of(0, 2));
 		
-		makeAssertionOverStaffList(findByDepartment_IdPaginated.get(0), staffList.get(0));
+		makeAssertionOverStaffList(findByDepartment_IdPaginated.getContent().get(0), staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByDepartment_Id(any(Long.class), any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
+		verify(mockPageStaff, times(1)).getContent();
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByDepartmentIdPaginated is successful.");
 	}
@@ -530,11 +614,13 @@ public class StaffServiceTest {
 	public void testFindByDepartmentIdPaginatedWithNotFoundException() throws NotFoundException {
 		logger.info("testFindByDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByDepartment_Id(anyLong(), any(Pageable.class))).thenReturn(new ArrayList<>());
+		when(mockStaffDAO.findByDepartment_Id(anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(true);
 		
-		staffService.findByDepartmentIdPaginated(staffList.get(0).getDepartment().getId(), 0, 2);
+		staffService.findByDepartmentIdPaginated(staffList.get(0).getDepartment().getId(), PageRequest.of(0, 2));
 		
 		verify(mockStaffDAO, times(1)).findByDepartment_Id(any(Long.class), any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
 		
 		logger.info("testFindByDepartmentIdPaginated is successful.");
 	}
@@ -544,10 +630,12 @@ public class StaffServiceTest {
 		logger.info("testFindByIdAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByIdAndDepartment_Id(anyLong(), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		Staff findByIdAndDepartmentId = staffService.findByIdAndDepartmentId(2L, 3L);
-		makeAssertionOverStaffList(findByIdAndDepartmentId, staffList.get(0));
+		StaffDTO findByIdAndDepartmentId = staffService.findByIdAndDepartmentId(2L, 3L);
+		makeAssertionOverStaffList(findByIdAndDepartmentId, staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByIdAndDepartment_Id(anyLong(), anyLong());
+		verify(mockModelMapper, times(1)).map(staff, StaffDTO.class);
 		
 		logger.info("testFindByIdAndDepartmentId is successful.");
 	}
@@ -568,10 +656,13 @@ public class StaffServiceTest {
 		logger.info("testFindByFirstNameAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByFirstNameAndDepartment_Id(any(String.class), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByFirstNameAndDepartmentId = staffService.findByFirstNameAndDepartmentId("Ahmet", 2L);
-		makeAssertionOverStaffList(findByFirstNameAndDepartmentId.get(0), staffList.get(0));
+		List<StaffDTO> findByFirstNameAndDepartmentId = staffService.findByFirstNameAndDepartmentId("Ahmet", 2L);
+		makeAssertionOverStaffList(findByFirstNameAndDepartmentId.get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByFirstNameAndDepartment_Id(any(String.class), anyLong());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByFirstNameAndDepartmentId is successful.");
 	}
@@ -591,11 +682,16 @@ public class StaffServiceTest {
 	public void testFindByFirstNameAndDepartmentIdPaginated() throws NotFoundException {
 		logger.info("testFindByFirstNameAndDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(staffList);
+		when(mockStaffDAO.findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.getContent()).thenReturn(staffList);
+		when(mockPageStaff.isEmpty()).thenReturn(false);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByFirstNameAndDepartmentIdPaginated = staffService.findByFirstNameAndDepartmentIdPaginated("Ahmet", 2L, 0, 2);
-		makeAssertionOverStaffList(findByFirstNameAndDepartmentIdPaginated.get(0), staffList.get(0));
+		PageForClient<StaffDTO> findByFirstNameAndDepartmentIdPaginated = staffService.findByFirstNameAndDepartmentIdPaginated("Ahmet", 2L, PageRequest.of(0, 2));
+		makeAssertionOverStaffList(findByFirstNameAndDepartmentIdPaginated.getContent().get(0), staffDTOList.get(0));
 		verify(mockStaffDAO, times(1)).findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByFirstNameAndDepartmentIdPaginated is successful.");
 	}
@@ -604,10 +700,13 @@ public class StaffServiceTest {
 	public void testFindByFirstNameAndDepartmentIdPaginatedWithNotFoundException() throws NotFoundException {
 		logger.info("testFindByFirstNameAndDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(new ArrayList<>());
+		when(mockStaffDAO.findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(true);
 		
-		staffService.findByFirstNameAndDepartmentIdPaginated("Ahmet", 2L, 0, 2);
+		staffService.findByFirstNameAndDepartmentIdPaginated("Ahmet", 2L, PageRequest.of(0, 2));
+		
 		verify(mockStaffDAO, times(1)).findByFirstNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
 		
 		logger.info("testFindByFirstNameAndDepartmentIdPaginated is successful.");
 	}
@@ -617,10 +716,13 @@ public class StaffServiceTest {
 		logger.info("testFindByLastNameAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByLastNameAndDepartmentId = staffService.findByLastNameAndDepartmentId("ÇALIŞKAN", 2L);
-		makeAssertionOverStaffList(findByLastNameAndDepartmentId.get(0), staffList.get(0));
+		List<StaffDTO> findByLastNameAndDepartmentId = staffService.findByLastNameAndDepartmentId("ÇALIŞKAN", 2L);
+		makeAssertionOverStaffList(findByLastNameAndDepartmentId.get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByLastNameAndDepartment_Id(any(String.class), anyLong());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByLastNameAndDepartmentId is successful.");
 	}
@@ -629,7 +731,7 @@ public class StaffServiceTest {
 	public void testFindByLastNameAndDepartmentIdWithNotFoundException() throws NotFoundException {
 		logger.info("testFindByLastNameAndDepartmentId is started.");
 		
-		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong())).thenReturn(staffList);
+		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong())).thenReturn(new ArrayList<>());
 		
 		staffService.findByLastNameAndDepartmentId("ÇALIŞKAN", 2L);
 		verify(mockStaffDAO, times(1)).findByLastNameAndDepartment_Id(any(String.class), anyLong());
@@ -641,12 +743,17 @@ public class StaffServiceTest {
 	public void testFindByLastNameAndDepartmentIdPaginated() throws NotFoundException {
 		logger.info("testFindByLastNameAndDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(staffList);
+		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(false);
+		when(mockPageStaff.getContent()).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByLastNameAndDepartmentIdPaginated = staffService.findByLastNameAndDepartmentIdPaginated("TEMBEL", 2L, 0, 2);
-		makeAssertionOverStaffList(findByLastNameAndDepartmentIdPaginated.get(0), staffList.get(0));
+		PageForClient<StaffDTO> findByLastNameAndDepartmentIdPaginated = staffService.findByLastNameAndDepartmentIdPaginated("TEMBEL", 2L, PageRequest.of(0, 2));
+		makeAssertionOverStaffList(findByLastNameAndDepartmentIdPaginated.getContent().get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class));
-		
+		verify(mockPageStaff, times(1)).isEmpty();
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		logger.info("testFindByLastNameAndDepartmentIdPaginated is successful.");
 	}
 	
@@ -654,10 +761,13 @@ public class StaffServiceTest {
 	public void testFindByLastNameAndDepartmentIdPaginatedWithNotFoundException() throws NotFoundException {
 		logger.info("testFindByLastNameAndDepartmentIdPaginated is started.");
 		
-		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(new ArrayList<>());
+		when(mockStaffDAO.findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class))).thenReturn(mockPageStaff);
+		when(mockPageStaff.isEmpty()).thenReturn(true);
 		
-		staffService.findByLastNameAndDepartmentIdPaginated("TEMBEL", 2L, 0, 2);
+		staffService.findByLastNameAndDepartmentIdPaginated("TEMBEL", 2L, PageRequest.of(0, 2));
+		
 		verify(mockStaffDAO, times(1)).findByLastNameAndDepartment_Id(any(String.class), anyLong(), any(Pageable.class));
+		verify(mockPageStaff, times(1)).isEmpty();
 		
 		logger.info("testFindByLastNameAndDepartmentIdPaginated is successful.");
 	}
@@ -667,10 +777,13 @@ public class StaffServiceTest {
 		logger.info("testFindByPhoneAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByPhoneAndDepartment_Id(any(String.class), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByPhoneAndDepartmentId = staffService.findByPhoneAndDepartmentId("1231231231", 2L);
-		makeAssertionOverStaffList(findByPhoneAndDepartmentId.get(0), staffList.get(0));
+		List<StaffDTO> findByPhoneAndDepartmentId = staffService.findByPhoneAndDepartmentId("1231231231", 2L);
+		makeAssertionOverStaffList(findByPhoneAndDepartmentId.get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByPhoneAndDepartment_Id(any(String.class), anyLong());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByPhoneAndDepartmentId is successful.");
 	}
@@ -692,10 +805,13 @@ public class StaffServiceTest {
 		logger.info("testFindByEmailAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByEmailAndDepartment_Id(any(String.class), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByEmailAndDepartmentId = staffService.findByEmailAndDepartmentId("mehmet@abc.com", 2L);
-		makeAssertionOverStaffList(findByEmailAndDepartmentId.get(0), staffList.get(0));
+		List<StaffDTO> findByEmailAndDepartmentId = staffService.findByEmailAndDepartmentId("mehmet@abc.com", 2L);
+		makeAssertionOverStaffList(findByEmailAndDepartmentId.get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByEmailAndDepartment_Id(any(String.class), anyLong());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByEmailAndDepartmentId is successful.");
 	}
@@ -717,11 +833,14 @@ public class StaffServiceTest {
 		logger.info("testFindByCreateDateAndDepartmentId is started.");
 		
 		when(mockStaffDAO.findByCreateDateAndDepartment_Id(any(Date.class), anyLong())).thenReturn(staffList);
+		when(mockModelMapper.map(staffList, StaffDTO[].class)).thenReturn(staffDTOArray);
 		
-		List<Staff> findByRegisteredTimeAndDepartmentId = staffService
+		List<StaffDTO> findByRegisteredTimeAndDepartmentId = staffService
 				.findByCreateDateAndDepartmentId(staffList.get(0).getCreateDate(), 2L);
-		makeAssertionOverStaffList(findByRegisteredTimeAndDepartmentId.get(0), staffList.get(0));
+		makeAssertionOverStaffList(findByRegisteredTimeAndDepartmentId.get(0), staffDTOList.get(0));
+		
 		verify(mockStaffDAO, times(1)).findByCreateDateAndDepartment_Id(any(Date.class), anyLong());
+		verify(mockModelMapper, times(1)).map(staffList, StaffDTO[].class);
 		
 		logger.info("testFindByCreateDateAndDepartmentId is successful.");
 	}
@@ -738,7 +857,7 @@ public class StaffServiceTest {
 		logger.info("testFindByCreateDateAndDepartmentId is successful.");
 	}
 	
-	private void makeAssertionOverStaffList(Staff actualStaff, Staff staffForCheck) {
+	private void makeAssertionOverStaffList(StaffDTO actualStaff, StaffDTO staffForCheck) {
 		assertNotNull(actualStaff);
 		assertEquals(actualStaff.getFirstName(), staffForCheck.getFirstName());
 		assertEquals(actualStaff.getLastName(), staffForCheck.getLastName());

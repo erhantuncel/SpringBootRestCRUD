@@ -275,14 +275,14 @@ public class StaffDAOTest {
 	public void testFindByFirstNameAndDepartmentIdPaginated() {
 		logger.info("testFindByFirstNameAndDepartmentIdPaginated is started.");
 
-		List<Staff> findByFirstNameAndDepartmentId = staffDAO.findByFirstNameAndDepartment_Id("Emre", 2L, PageRequest.of(0, 2));
+		List<Staff> findByFirstNameAndDepartmentId = staffDAO.findByFirstNameAndDepartment_Id("Emre", 2L, PageRequest.of(0, 2)).getContent();
 		assertNotNull(findByFirstNameAndDepartmentId);
 		assertEquals(findByFirstNameAndDepartmentId.size(), 2);
 		assertEquals(findByFirstNameAndDepartmentId.get(0).getDepartment().getId(), Long.valueOf("2"));
 		assertEquals(findByFirstNameAndDepartmentId.get(0).getFirstName(), "Emre");
 		assertEquals(findByFirstNameAndDepartmentId.get(0).getLastName(), "BİNBAY");
 		
-		findByFirstNameAndDepartmentId = staffDAO.findByFirstNameAndDepartment_Id("Emre", 2L, PageRequest.of(1, 2));
+		findByFirstNameAndDepartmentId = staffDAO.findByFirstNameAndDepartment_Id("Emre", 2L, PageRequest.of(1, 2)).getContent();
 		assertNotNull(findByFirstNameAndDepartmentId);
 		assertEquals(findByFirstNameAndDepartmentId.size(), 1);
 		assertEquals(findByFirstNameAndDepartmentId.get(0).getDepartment().getId(), Long.valueOf("2"));
@@ -311,14 +311,14 @@ public class StaffDAOTest {
 	public void testFindByLastNameAndDepartmentIdPaginated() {
 		logger.info("testFindByLastNameAndDepartmentIdPaginated is started.");
 
-		List<Staff> findByLastNameAndDepartmentId = staffDAO.findByLastNameAndDepartment_Id("CİĞERLİOĞLU", 1L, PageRequest.of(0, 1));
+		List<Staff> findByLastNameAndDepartmentId = staffDAO.findByLastNameAndDepartment_Id("CİĞERLİOĞLU", 1L, PageRequest.of(0, 1)).getContent();
 		assertNotNull(findByLastNameAndDepartmentId);
 		assertEquals(findByLastNameAndDepartmentId.size(), 1);
 		assertEquals(findByLastNameAndDepartmentId.get(0).getDepartment().getId(), Long.valueOf("1"));
 		assertEquals(findByLastNameAndDepartmentId.get(0).getFirstName(), "Simge");
 		assertEquals(findByLastNameAndDepartmentId.get(0).getLastName(), "CİĞERLİOĞLU");
 		
-		findByLastNameAndDepartmentId = staffDAO.findByLastNameAndDepartment_Id("CİĞERLİOĞLU", 1L, PageRequest.of(1, 1));
+		findByLastNameAndDepartmentId = staffDAO.findByLastNameAndDepartment_Id("CİĞERLİOĞLU", 1L, PageRequest.of(1, 1)).getContent();
 		assertNotNull(findByLastNameAndDepartmentId);
 		assertEquals(findByLastNameAndDepartmentId.size(), 1);
 		assertEquals(findByLastNameAndDepartmentId.get(0).getDepartment().getId(), Long.valueOf("1"));
