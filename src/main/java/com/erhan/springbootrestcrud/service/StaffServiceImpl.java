@@ -1,5 +1,6 @@
 package com.erhan.springbootrestcrud.service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -9,12 +10,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.hql.internal.ast.InvalidPathException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erhan.springbootrestcrud.dao.DepartmentDAO;
 import com.erhan.springbootrestcrud.dao.StaffDAO;
@@ -48,13 +52,21 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
-	public StaffDTO createWithDepartmentId(StaffDTO staff, Long departmentId) throws NotFoundException {
+	public StaffDTO createWithDepartmentId(StaffDTO staff, Long departmentId, MultipartFile imageFile) throws NotFoundException, InvalidPathException, IOException {
+		if(imageFile != null) {
+			String fileName = StringUtils.cleanPath(imageFile.getName());
+			if(fileName.contains("..")) {
+				throw new InvalidPathException("File path " + fileName +" is invalid ");
+			}			
+			staff.setImage(imageFile.getBytes());
+		}
 		Department department = departmentDAO.findById(departmentId).orElse(null);
 		if(department == null) {
 			throw new NotFoundException("Department with id = " + departmentId + " not found!");
 		}
 		staff.setDepartment(modelMapper.map(department, DepartmentDTO.class));
 		Staff staffEntity = modelMapper.map(staff, Staff.class);
+		staffEntity.setCreateDate(new Date());
 		staffDAO.save(staffEntity);
 		return modelMapper.map(staffEntity, StaffDTO.class);
 	}
@@ -224,7 +236,7 @@ public class StaffServiceImpl implements StaffService {
 	public StaffDTO findByIdAndDepartmentId(Long staffId, Long departmentId) throws NotFoundException {
 		List<Staff> staffList = staffDAO.findByIdAndDepartment_Id(staffId, departmentId);
 		if(staffList.size() <= 0) {
-			throw new NotFoundException("Staff with Id = " + staffId + " not found!");
+			throw new NotFoundException("Staff with Id = " + staffId + " for Department with id = " + departmentId + " not found!");
 		}
 		return modelMapper.map(staffList.get(0), StaffDTO.class);
 	}

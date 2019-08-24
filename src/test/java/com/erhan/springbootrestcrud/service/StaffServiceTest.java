@@ -1,10 +1,12 @@
 package com.erhan.springbootrestcrud.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.hql.internal.ast.InvalidPathException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -109,7 +111,7 @@ public class StaffServiceTest {
 	}
 	
 	@Test
-	public void testCreateWithDepartmentId() throws NotFoundException {
+	public void testCreateWithDepartmentId() throws NotFoundException, InvalidPathException, IOException {
 		logger.info("testCreateWithDepartmentId is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
@@ -117,7 +119,7 @@ public class StaffServiceTest {
 		when(mockModelMapper.map(staffDTO, Staff.class)).thenReturn(staff);
 		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		staffService.createWithDepartmentId(staffDTO, 2L);
+		staffService.createWithDepartmentId(staffDTO, 2L, null);
 		assertEquals(staff.getDepartment(), department);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
@@ -130,11 +132,11 @@ public class StaffServiceTest {
 	}
 	
 	@Test(expected = NotFoundException.class)
-	public void testCreateWithDepartmentIdWithException() throws NotFoundException {
+	public void testCreateWithDepartmentIdWithException() throws NotFoundException, InvalidPathException, IOException {
 		logger.info("testCreateWithDepartmentIdWithException is started.");
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.empty());
 		
-		staffService.createWithDepartmentId(staffDTO, 2L);
+		staffService.createWithDepartmentId(staffDTO, 2L, null);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		
