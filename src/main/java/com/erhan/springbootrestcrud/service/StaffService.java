@@ -21,7 +21,7 @@ public interface StaffService {
 	public StaffDTO create(StaffDTO staff);
 	public StaffDTO createWithDepartmentId(StaffDTO staff, Long departmentId, MultipartFile imageFile) throws NotFoundException, InvalidPathException, IOException;
 	public StaffDTO update(StaffDTO staff);
-	public StaffDTO updateWithDepartmentId(Long staffId, Long departmentId, StaffDTO staff) throws NotFoundException, IllegalArgumentException;
+	public StaffDTO updateWithDepartmentId(Long staffId, Long departmentId, StaffDTO staff, MultipartFile imageFile) throws NotFoundException, IllegalArgumentException, InvalidPathException, IOException;
 	public void remove(StaffDTO staff);
 	public void removeWithDepartmentId(Long staffId, Long departmentId) throws NotFoundException, IllegalArgumentException;
 	public StaffDTO findById(Long id) throws NotFoundException;

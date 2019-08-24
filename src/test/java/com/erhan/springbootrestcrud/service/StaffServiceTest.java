@@ -160,7 +160,7 @@ public class StaffServiceTest {
 	}
 	
 	@Test
-	public void testUpdateWithDepartmentId() throws IllegalArgumentException, NotFoundException {
+	public void testUpdateWithDepartmentId() throws IllegalArgumentException, NotFoundException, InvalidPathException, IOException {
 		logger.info("testUpdateWithDepartmentId is started.");
 		
 		Staff staffUpdate = new Staff("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), department);
@@ -171,7 +171,7 @@ public class StaffServiceTest {
 		when(mockModelMapper.map(staffUpdateDTO, Staff.class)).thenReturn(staffUpdate);
 		when(mockModelMapper.map(staff, StaffDTO.class)).thenReturn(staffDTO);
 		
-		staffService.updateWithDepartmentId(1L, 1L, staffUpdateDTO);
+		staffService.updateWithDepartmentId(1L, 1L, staffUpdateDTO, null);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		verify(mockStaffDAO, times(1)).findById(anyLong());
@@ -185,13 +185,13 @@ public class StaffServiceTest {
 	}
 	
 	@Test(expected = NotFoundException.class)
-	public void testUpdateWithDepartmentIdWithNotFoundDepartment() throws IllegalArgumentException, NotFoundException {
+	public void testUpdateWithDepartmentIdWithNotFoundDepartment() throws IllegalArgumentException, NotFoundException, InvalidPathException, IOException {
 		logger.info("testUpdateWithDepartmentIdWithNotFoundDepartment is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.empty());
 		
 		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
-		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
+		staffService.updateWithDepartmentId(1L, 1L, staffUpdate, null);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		
@@ -199,14 +199,14 @@ public class StaffServiceTest {
 	}
 	
 	@Test(expected = NotFoundException.class)
-	public void testUpdateWithDepartmentIdWithNotFoundStaff() throws IllegalArgumentException, NotFoundException {
+	public void testUpdateWithDepartmentIdWithNotFoundStaff() throws IllegalArgumentException, NotFoundException, InvalidPathException, IOException {
 		logger.info("testUpdateWithDepartmentIdWithNotFoundStaff is started.");
 		
 		when(mockDepartmentDAO.findById(anyLong())).thenReturn(Optional.of(department));
 		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.empty());
 		
 		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
-		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
+		staffService.updateWithDepartmentId(1L, 1L, staffUpdate, null);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		verify(mockStaffDAO, times(1)).findById(anyLong());
@@ -215,7 +215,7 @@ public class StaffServiceTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void testUpdateWithDepartmentIdWithIllegalArgumentException() throws IllegalArgumentException, NotFoundException {
+	public void testUpdateWithDepartmentIdWithIllegalArgumentException() throws IllegalArgumentException, NotFoundException, InvalidPathException, IOException {
 		logger.info("testUpdateWithDepartmentId is started.");
 		
 		Staff unknownStaff = new Staff("Mehmet", "ÇALIŞKAN", "1231231231", "mehmet2@abc.com", new Date(), department);
@@ -224,7 +224,7 @@ public class StaffServiceTest {
 		when(mockStaffDAO.findById(anyLong())).thenReturn(Optional.of(unknownStaff));
 		
 		StaffDTO staffUpdate = new StaffDTO("Mehmet", "ÇALIŞKAN", "4564564566", "mehmet2@abc.com", new Date(), departmentDTO);
-		staffService.updateWithDepartmentId(1L, 1L, staffUpdate);
+		staffService.updateWithDepartmentId(1L, 1L, staffUpdate, null);
 		
 		verify(mockDepartmentDAO, times(1)).findById(anyLong());
 		verify(mockStaffDAO, times(1)).findById(anyLong());

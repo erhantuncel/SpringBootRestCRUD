@@ -79,8 +79,17 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
-	public StaffDTO updateWithDepartmentId(Long staffId, Long departmentId, StaffDTO staff) 
-			throws NotFoundException, IllegalArgumentException {
+	public StaffDTO updateWithDepartmentId(Long staffId, Long departmentId, StaffDTO staff, MultipartFile imageFile) 
+			throws NotFoundException, IllegalArgumentException, InvalidPathException, IOException {
+		if(imageFile != null) {
+			String fileName = StringUtils.cleanPath(imageFile.getName());
+			if(fileName.contains("..")) {
+				throw new InvalidPathException("File path " + fileName +" is invalid ");
+			}			
+			staff.setImage(imageFile.getBytes());
+		} else {
+			staff.setImage(null);
+		}
 		Department department = departmentDAO.findById(departmentId).orElse(null);
 		if(department == null) {
 			throw new NotFoundException("Department with id = " + departmentId + "  not found!");
