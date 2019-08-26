@@ -54,7 +54,7 @@ public class Staff {
 	@NotEmpty
 	@NotNull
 	@Size(max = 10)
-	@Pattern(regexp="[0-9]{10}", message = "{validation.phone.size.ten}")
+	@Pattern(regexp="[0-9]{10}", message = "Phone must be 10 numbers.")
 	@Column(name = "PHONE")
 	private String phone;
 	

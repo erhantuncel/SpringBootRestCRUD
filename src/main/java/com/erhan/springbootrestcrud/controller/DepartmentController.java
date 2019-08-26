@@ -3,6 +3,8 @@ package com.erhan.springbootrestcrud.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,7 +65,7 @@ public class DepartmentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<DepartmentDTO> createDepartment(@RequestBody DepartmentDTO department) {
+	public ResponseEntity<DepartmentDTO> createDepartment(@Valid @RequestBody DepartmentDTO department) {
 		log.info("createDepartment method is invoked.");
 		DepartmentDTO departmentDTO = departmentService.create(department);
 		return ResponseEntity.ok(departmentDTO);

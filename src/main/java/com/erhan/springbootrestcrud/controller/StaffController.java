@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.Validator;
+
 import org.hibernate.hql.internal.ast.InvalidPathException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +37,7 @@ public class StaffController {
 
 	private final StaffService staffService;
 	
-	public StaffController(StaffService staffService) {
+	public StaffController(StaffService staffService, Validator validator) {
 		this.staffService = staffService;
 	}
 
@@ -73,8 +76,8 @@ public class StaffController {
 	
 	@PostMapping
 	public ResponseEntity<StaffDTO> createStaff(@PathVariable("departmentId") Long departmentId, 
-												@RequestPart("staff") StaffDTO staff,
-												@RequestPart("image") MultipartFile imageFile) 
+												@Valid @RequestPart(value = "staff", required = true) StaffDTO staff,
+												@RequestPart(value = "image", required = false) MultipartFile imageFile) 
 														throws InvalidPathException, NotFoundException, IOException {
 		log.info("createStaff method is invoked.");
 		StaffDTO createWithDepartmentId = staffService.createWithDepartmentId(staff, departmentId, imageFile);
