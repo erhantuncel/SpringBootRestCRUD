@@ -1,9 +1,14 @@
 package com.erhan.springbootrestcrud.exception;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +26,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		log.info("Exception message = " + ex.getMessage());
 		log.debug("Exception trace = " + ex.getStackTrace());
-		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), ex.getMessage());
+		List<String> details = new ArrayList<String>();
+		details.add(ex.getMessage());
+		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), "Server Error", details);
 		return new ResponseEntity<Object>(apiErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		log.info("Validation error - Count = " + ex.getBindingResult().getErrorCount());
+		List<String> details = new ArrayList<>();
+		for(ObjectError error : ex.getBindingResult().getAllErrors()) {
+			for(Object arg : error.getArguments()) {
+				log.debug("Object = " + error.getObjectName() + " Argument = " + arg.toString());
+			}
+			details.add(error.getDefaultMessage());
+		}
+		ApiErrorResponse errorResponse = new ApiErrorResponse(new Date(), "Validation Error", details);
+		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	
 }

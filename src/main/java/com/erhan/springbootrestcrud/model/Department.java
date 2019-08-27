@@ -37,7 +37,6 @@ public class Department {
 	
 	@Column(name = "department_name")
 	@NotEmpty
-	@NotNull
 	@Size(max = 100)
 	private String departmentName;
 

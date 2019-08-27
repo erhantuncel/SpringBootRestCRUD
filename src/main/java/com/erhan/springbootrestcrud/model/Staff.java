@@ -24,6 +24,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -40,19 +43,16 @@ public class Staff {
 	private Long id;
 	
 	@NotEmpty
-	@NotNull
 	@Size(max = 40)
 	@Column(name = "FIRST_NAME")
 	private String firstName;
 	
 	@NotEmpty
-	@NotNull
 	@Size(max = 40)
 	@Column(name = "LAST_NAME")
 	private String lastName;
 	
 	@NotEmpty
-	@NotNull
 	@Size(max = 10)
 	@Pattern(regexp="[0-9]{10}", message = "Phone must be 10 numbers.")
 	@Column(name = "PHONE")
@@ -71,6 +71,7 @@ public class Staff {
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
 	@Column(name = "CREATE_DATE")
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="Europe/Istanbul")
 	private Date createDate;
 	
 	
