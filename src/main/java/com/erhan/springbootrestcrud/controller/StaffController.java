@@ -22,17 +22,27 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.erhan.springbootrestcrud.annotation.ApiPageable;
 import com.erhan.springbootrestcrud.dto.StaffDTO;
 import com.erhan.springbootrestcrud.model.PageForClient;
 import com.erhan.springbootrestcrud.service.StaffService;
 import com.erhan.springbootrestcrud.util.ApiPaths;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(ApiPaths.PathForStaffController.staffs)
 @Slf4j
+@Api(value = ApiPaths.PathForStaffController.staffs, tags = {"Staff Resource"})
+@SwaggerDefinition(tags = {
+		@Tag(name = "Staff Resource", description = "Staff APIs")
+})
 public class StaffController {
 
 	private final StaffService staffService;
@@ -42,6 +52,7 @@ public class StaffController {
 	}
 
 	@GetMapping
+	@ApiOperation(value = "Get all staffs operation.", response = StaffDTO.class)
 	public ResponseEntity<List<StaffDTO>> getAllStaffs(
 			@PathVariable("departmentId") Long departmentId, 
 			@RequestParam Map<String, String> queryParameters) throws IllegalArgumentException, NotFoundException, ParseException {
@@ -56,10 +67,12 @@ public class StaffController {
 	}
 	
 	@GetMapping("/pagination")
+	@ApiOperation(value = "Get all staffs with query parameters and pagination", response = PageForClient.class)
+	@ApiPageable
 	public ResponseEntity<PageForClient<StaffDTO>> getAllStaffsWithQueryParameterAndPagination(
 			@PathVariable("departmentId") Long departmentId,
 			@RequestParam Map<String, String> queryParameters, 
-			Pageable pageable) throws NotFoundException, IllegalArgumentException, ParseException {
+			@ApiIgnore Pageable pageable) throws NotFoundException, IllegalArgumentException, ParseException {
 		log.info("getAllStaffsWithPagination method is invoked.");
 		PageForClient<StaffDTO> staffListPaginated = staffService.findByDepartmentIdAndQueryParametersPaginated(
 				departmentId, queryParameters, pageable);
@@ -68,6 +81,7 @@ public class StaffController {
 	}
 	
 	@GetMapping("/{staffId}")
+	@ApiOperation(value = "Get staff by Id operation.", response = StaffDTO.class)
 	public ResponseEntity<StaffDTO> getByStaffId(@PathVariable("departmentId") Long departmentId, @PathVariable("staffId") Long staffId) throws NotFoundException {
 		log.info("getByStaffId method is invoked.");
 		StaffDTO staffDTO = staffService.findByIdAndDepartmentId(staffId, departmentId);
@@ -75,6 +89,7 @@ public class StaffController {
 	}
 	
 	@PostMapping
+	@ApiOperation(value = "Create staff operation.", response = StaffDTO.class)
 	public ResponseEntity<StaffDTO> createStaff(@PathVariable("departmentId") Long departmentId, 
 												@Valid @RequestPart(value = "staff", required = true) StaffDTO staff,
 												@RequestPart(value = "image", required = false) MultipartFile imageFile) 
@@ -85,6 +100,7 @@ public class StaffController {
 	}
 	
 	@PutMapping("{staffId}")
+	@ApiOperation(value = "Update staff operation.", response = StaffDTO.class)
 	public ResponseEntity<StaffDTO> updateStaff(@PathVariable("departmentId") Long departmentId, 
 												@PathVariable("staffId") Long staffId,
 												@RequestPart("staff") StaffDTO staff,
@@ -96,7 +112,8 @@ public class StaffController {
 	}
 	
 	@DeleteMapping("/{staffId}")
-	public ResponseEntity<StaffDTO> deleteStaff(@PathVariable("departmentId") Long departmentId, 
+	@ApiOperation(value = "Delete staff operation.")
+	public ResponseEntity<?> deleteStaff(@PathVariable("departmentId") Long departmentId, 
 												@PathVariable("staffId") Long staffId) throws IllegalArgumentException, NotFoundException {
 		log.info("deleteStaff method is invoked.");
 		staffService.removeWithDepartmentId(staffId, departmentId);
