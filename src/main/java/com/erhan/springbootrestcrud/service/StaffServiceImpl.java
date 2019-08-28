@@ -339,9 +339,9 @@ public class StaffServiceImpl implements StaffService {
 			if(keySet.contains("email")) {
 				return findByEmailAndDepartmentId(queryParameters.get("email"), departmentId);
 			}
-			if(keySet.contains("registeredTime")) {
+			if(keySet.contains("createDate")) {
 				SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.forLanguageTag("tr"));
-				return findByCreateDateAndDepartmentId(df.parse(queryParameters.get("registeredTime")), departmentId);
+				return findByCreateDateAndDepartmentId(df.parse(queryParameters.get("createDate")), departmentId);
 			}
 		}
 		throw new IllegalArgumentException("Wrong query filter");		
