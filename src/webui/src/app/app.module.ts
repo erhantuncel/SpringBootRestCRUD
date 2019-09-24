@@ -7,6 +7,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 
 export const translateLoaderFactory = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -14,7 +17,10 @@ export const translateLoaderFactory = (http: HttpClient) => {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    AppLayoutComponent
   ],
   imports: [
     BrowserModule,

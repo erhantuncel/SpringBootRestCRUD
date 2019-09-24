@@ -1,10 +1,11 @@
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AppLayoutComponent } from './layout';
 
 
 const routes: Routes = [{
-  path: '',
+  path: '', component: AppLayoutComponent,
   children:  [
     {path: '', pathMatch: 'full', redirectTo: 'staff'},
     {path: 'department', loadChildren: './pages/department/department.module#DepartmentModule'},
