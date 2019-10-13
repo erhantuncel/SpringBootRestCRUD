@@ -1,3 +1,5 @@
+import { ApiService } from './services/api.service';
+import { DepartmentService } from './services/shared/department.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -34,7 +36,10 @@ export const translateLoaderFactory = (http: HttpClient) => {
       }
     }),
   ],
-  providers: [],
+  providers: [
+    ApiService,
+    DepartmentService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
