@@ -1,7 +1,67 @@
 <div class="container">
-    <div class="row mb-0 mt-1">
-      <div class="col-sm-12">
-
+  <div class="row mb-0 mt-1" hidden>
+    <div class="col-sm-12">
+      <div class="alert alert-dismissible fade show block alert-danger" role="alert">
+        <strong>Warning text</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
     </div>
   </div>
+  <div class="row mt-3 mb-2 justify-content-between">
+    <div class="col-sm-3 text-left">
+      <h4>Departman Listesi</h4>
+    </div>
+    <div class="col-sm-6 text-right">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <table #example class="table" style="width:100%">
+          <thead class="table-dark">
+              <tr>
+                  <th style="width: 8%;">No</th>
+                  <th>Departman</th>
+                  <th style="width: 17%;">İşlemler</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let department of data | paginate: config" >
+                <td style="width: 8%;">{{department.id}}</td>
+                <td>{{department.departmentName}}</td>
+                <td style="width: 17%;">
+                  <button type="button" class="btn btn-dark mr-1">Güncelle</button>
+                  <button type="button" class="btn btn-dark">Sil</button>
+                </td>
+              </tr>
+            </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      Sayfada
+      <select #pageSizeSelect [(ngModel)]="pageSize" class="custom-select" style="width: auto;"
+          name="pageSizeSelect" (change)="onPageSizeSelected(pageSizeSelect.value)">
+        <option *ngFor="let pageSizeOption of pageSizeOptions" [value]="pageSizeOption">
+          {{ pageSizeOption }}
+        </option>
+      </select>
+        kayıt göster.
+    </div>
+    <div class="col-sm-8">
+      <pagination-template #p="paginationApi" (pageChange)="getPage($event)">
+        <nav>
+          <ul class="pagination justify-content-end">
+            <li *ngFor="let page of p.pages" class="page-item" [class.active]="p.getCurrent() === page.value">
+                <a (click)="p.setCurrent(page.value)" class="page-link" [routerLink]="">
+                    {{ page.label }} <span class="sr-only">(current)</span>
+                </a>
+            </li>
+          </ul>
+        </nav>
+      </pagination-template>
+    </div>
+  </div>
+</div>
