@@ -1,0 +1,34 @@
+{
+  "BROWSER" : {
+    "title": "Spring Boot Rest Client"
+  },
+
+  "TEMPLATE": {
+    "HEADER": {
+      "NAVBAR": {
+        "title": "Staff Information System",
+        "button.add.staff": "Add Staff",
+        "button.add.department": "Add Department"
+      }
+    },
+
+    "FOOTER": {
+      "link.turkish": "Turkish",
+      "link.english": "English"
+    }
+  },
+
+  "DEPARTMENT": {
+    "list.title": "Department List",
+    "list.table.title.no": "Id",
+    "list.table.title.department": "Department",
+    "list.table.title.actions": "Actions",
+    "list.table.row.button.update": "Update",
+    "list.table.row.button.delete": "Delete",
+    "list.table.label.entryCount": "Entry Count"
+  },
+
+  "STAFF": {
+
+  }
+}

@@ -1,8 +1,8 @@
 <footer class="footer py-3 fixed-bottom">
   <div class="container text-right">
     <span class="text-muted">
-      <a href="/?lang=tr">Türkçe</a>|
-      <a href="/?lang=en">İngilizce</a>
+      <a [routerLink]="" (click)="changeLanguage('tr')" >{{ "TEMPLATE.FOOTER.link.turkish" | translate }}</a> |
+      <a [routerLink]="" (click)="changeLanguage('en')" >{{ "TEMPLATE.FOOTER.link.english" | translate }}</a>
     </span>
   </div>
 </footer>

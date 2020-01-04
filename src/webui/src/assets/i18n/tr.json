@@ -1,3 +1,34 @@
 {
-  "title": "Spring Boot Rest Örneği"
+  "BROWSER" : {
+    "title": "Spring Boot Rest İstemcisi"
+  },
+
+  "TEMPLATE": {
+    "HEADER": {
+      "NAVBAR": {
+        "title": "Personel Bilgi Sistemi",
+        "button.add.staff": "Personel Ekle",
+        "button.add.department": "Departman Ekle"
+      }
+    },
+
+    "FOOTER": {
+      "link.turkish": "Türkçe",
+      "link.english": "İngilizce"
+    }
+  },
+
+  "DEPARTMENT": {
+    "list.title": "Departman Listesi",
+    "list.table.title.no": "No",
+    "list.table.title.department": "Departman",
+    "list.table.title.actions": "İşlemler",
+    "list.table.row.button.update": "Güncelle",
+    "list.table.row.button.delete": "Sil",
+    "list.table.label.entryCount": "Kayıt sayısı"
+  },
+
+  "STAFF": {
+
+  }
 }

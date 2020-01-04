@@ -11,7 +11,7 @@
   </div>
   <div class="row mt-3 mb-2 justify-content-between">
     <div class="col-sm-3 text-left">
-      <h4>Departman Listesi</h4>
+      <h4>{{ "DEPARTMENT.list.title" | translate }}</h4>
     </div>
     <div class="col-sm-6 text-right">
     </div>
@@ -21,9 +21,9 @@
       <table #example class="table" style="width:100%">
           <thead class="table-dark">
               <tr>
-                  <th style="width: 8%;">No</th>
-                  <th>Departman</th>
-                  <th style="width: 17%;">İşlemler</th>
+                <th style="width: 8%;">{{ "DEPARTMENT.list.table.title.no" | translate }}</th>
+                  <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
+                  <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
               </tr>
           </thead>
           <tbody>
@@ -31,8 +31,8 @@
                 <td style="width: 8%;">{{department.id}}</td>
                 <td>{{department.departmentName}}</td>
                 <td style="width: 17%;">
-                  <button type="button" class="btn btn-dark mr-1">Güncelle</button>
-                  <button type="button" class="btn btn-dark">Sil</button>
+                  <button type="button" class="btn btn-dark mr-1">{{ "DEPARTMENT.list.table.row.button.update" | translate }}</button>
+                  <button type="button" class="btn btn-dark">{{ "DEPARTMENT.list.table.row.button.delete" | translate }}</button>
                 </td>
               </tr>
             </tbody>
@@ -41,14 +41,13 @@
   </div>
   <div class="row">
     <div class="col-sm-4">
-      Sayfada
+      {{"DEPARTMENT.list.table.label.entryCount" | translate }}&nbsp;
       <select #pageSizeSelect [(ngModel)]="pageSize" class="custom-select" style="width: auto;"
           name="pageSizeSelect" (change)="onPageSizeSelected(pageSizeSelect.value)">
         <option *ngFor="let pageSizeOption of pageSizeOptions" [value]="pageSizeOption">
           {{ pageSizeOption }}
         </option>
       </select>
-        kayıt göster.
     </div>
     <div class="col-sm-8">
       <pagination-template #p="paginationApi" (pageChange)="getPage($event)">
