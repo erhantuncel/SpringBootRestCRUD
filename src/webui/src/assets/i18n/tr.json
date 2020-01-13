@@ -6,9 +6,7 @@
   "TEMPLATE": {
     "HEADER": {
       "NAVBAR": {
-        "title": "Personel Bilgi Sistemi",
-        "button.add.staff": "Personel Ekle",
-        "button.add.department": "Departman Ekle"
+        "title": "Personel Bilgi Sistemi"
       }
     },
 
@@ -25,10 +23,22 @@
     "list.table.title.actions": "İşlemler",
     "list.table.row.button.update": "Güncelle",
     "list.table.row.button.delete": "Sil",
-    "list.table.label.entryCount": "Kayıt sayısı"
+    "list.table.label.entryCount": "Kayıt sayısı",
+    "button.addDepartment": "Departman Ekle",
+    "ADDDEPARTMENTMODAL": {
+      "title": "Departman Ekle",
+      "label.departmentName": "Departman Adı",
+      "invalid.message.required": "Boş olmamalı.",
+      "invalid.message.minlength": "En az {{characterCount}} karakter olmalı.",
+      "invalid.message.maxlength": "En fazla {{characterCount}} karakter olmalı.",
+      "button.cancel": "Vazgeç",
+      "button.add": "Ekle",
+      "toastr.addDepartment.success.message": "Yeni departman ekleme başarılı.",
+      "toastr.addDepartment.error.message": "Yeni departman ekleme başarısız."
+    }
   },
 
   "STAFF": {
-
+    "button.addStaff": "Personel Ekle"
   }
 }

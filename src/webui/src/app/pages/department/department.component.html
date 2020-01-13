@@ -1,19 +1,10 @@
 <div class="container">
-  <div class="row mb-0 mt-1" hidden>
-    <div class="col-sm-12">
-      <div class="alert alert-dismissible fade show block alert-danger" role="alert">
-        <strong>Warning text</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    </div>
-  </div>
   <div class="row mt-3 mb-2 justify-content-between">
     <div class="col-sm-3 text-left">
       <h4>{{ "DEPARTMENT.list.title" | translate }}</h4>
     </div>
     <div class="col-sm-6 text-right">
+
     </div>
   </div>
   <div class="row">
@@ -22,8 +13,8 @@
           <thead class="table-dark">
               <tr>
                 <th style="width: 8%;">{{ "DEPARTMENT.list.table.title.no" | translate }}</th>
-                  <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
-                  <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
+                <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
+                <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
               </tr>
           </thead>
           <tbody>
@@ -63,4 +54,50 @@
       </pagination-template>
     </div>
   </div>
+  <div class="row">
+    <button class="btn btn-success float-sm-right ml-1" role="button"
+        (click)="showAddDepartmentDialog(addDepartmentModalTemplate)">
+      {{ "DEPARTMENT.button.addDepartment" | translate }}
+    </button>
+  </div>
+
+  <ng-template #addDepartmentModalTemplate>
+    <form [formGroup]="addDepartmentForm" (ngSubmit)="onSubmitAddDepartment(addDepartmentForm.value)" >
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{ "DEPARTMENT.ADDDEPARTMENTMODAL.title" | translate }}</h4>
+      <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="addDepartmentModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="departmentName">{{ "DEPARTMENT.ADDDEPARTMENTMODAL.label.departmentName" | translate }}</label>
+        <input id="name" type="text" class="form-control" required formControlName="departmentName"
+          [ngClass]="{'is-invalid': (departmentName.invalid && (departmentName.dirty || departmentName.touched)),
+                      'is-valid': (departmentName.valid && (departmentName.dirty || departmentName.touched))}">
+        <div *ngIf="!departmentName.errors" class="valid-feedback"></div>
+        <div *ngIf="departmentName.errors" class="invalid-feedback">
+          <div *ngIf="departmentName.errors.required">
+            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.required" | translate }}
+          </div>
+          <div *ngIf="departmentName.errors.minlength">
+            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.minlength" | translate:{characterCount: departmentNameMinLength} }}
+          </div>
+          <div *ngIf="departmentName.errors.maxlength">
+            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.maxlength" | translate:{characterCount: departmentNameMaxLength} }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" (click)="addDepartmentModal.hide()" type="button" >
+        {{ "DEPARTMENT.ADDDEPARTMENTMODAL.button.cancel" | translate }}
+      </button>
+      <button class="btn btn-primary">
+        {{ "DEPARTMENT.ADDDEPARTMENTMODAL.button.add" | translate }}
+      </button>
+    </div>
+    </form>
+  </ng-template>
 </div>

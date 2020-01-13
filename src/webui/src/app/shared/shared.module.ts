@@ -1,18 +1,21 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
+    CommonModule
   ],
   exports: [
     FormsModule,
-    TranslateModule
+    ReactiveFormsModule,
+    TranslateModule,
+    ModalModule
   ]
 })
 export class SharedModule { }

@@ -6,9 +6,7 @@
   "TEMPLATE": {
     "HEADER": {
       "NAVBAR": {
-        "title": "Staff Information System",
-        "button.add.staff": "Add Staff",
-        "button.add.department": "Add Department"
+        "title": "Staff Information System"
       }
     },
 
@@ -25,10 +23,22 @@
     "list.table.title.actions": "Actions",
     "list.table.row.button.update": "Update",
     "list.table.row.button.delete": "Delete",
-    "list.table.label.entryCount": "Entry Count"
+    "list.table.label.entryCount": "Entry Count",
+    "button.addDepartment": "Add Department",
+    "ADDDEPARTMENTMODAL": {
+      "title": "Add Department",
+      "label.departmentName": "Department Name",
+      "invalid.message.required": "Must not be empty.",
+      "invalid.message.minlength": "Must be at least {{characterCount}} characters.",
+      "invalid.message.maxlength": "Must be maximum {{characterCount}} characters.",
+      "button.cancel": "Cancel",
+      "button.add": "Add",
+      "toastr.addDepartment.success.message": "New department is added successfully.",
+      "toastr.addDepartment.error.message": "New department is not added successfully."
+    }
   },
 
   "STAFF": {
-
+    "button.addStaff": "Add Staff"
   }
 }
