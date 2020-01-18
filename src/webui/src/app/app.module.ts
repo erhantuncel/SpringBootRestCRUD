@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
+import { AddupdatedepartmentComponent } from './pages/department/addupdatedepartment/addupdatedepartment.component';
 
 export const translateLoaderFactory = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -26,7 +27,8 @@ export const translateLoaderFactory = (http: HttpClient) => {
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    AppLayoutComponent
+    AppLayoutComponent,
+    AddupdatedepartmentComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,9 @@ export const translateLoaderFactory = (http: HttpClient) => {
   providers: [
     ApiService,
     DepartmentService
+  ],
+  entryComponents: [
+    AddupdatedepartmentComponent,
   ],
   bootstrap: [AppComponent]
 })

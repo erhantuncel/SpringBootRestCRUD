@@ -17,7 +17,6 @@
   },
 
   "DEPARTMENT": {
-    "list.title": "Department List",
     "list.table.title.no": "Id",
     "list.table.title.department": "Department",
     "list.table.title.actions": "Actions",
@@ -25,16 +24,21 @@
     "list.table.row.button.delete": "Delete",
     "list.table.label.entryCount": "Entry Count",
     "button.addDepartment": "Add Department",
-    "ADDDEPARTMENTMODAL": {
-      "title": "Add Department",
-      "label.departmentName": "Department Name",
+    "ADDUPDATEDEPARTMENTMODAL": {
+      "title.add": "Add Department",
+      "title.update": "Update Department",
+      "label.departmentId": "Id",
+      "label.departmentName": "Department",
       "invalid.message.required": "Must not be empty.",
       "invalid.message.minlength": "Must be at least {{characterCount}} characters.",
       "invalid.message.maxlength": "Must be maximum {{characterCount}} characters.",
       "button.cancel": "Cancel",
       "button.add": "Add",
-      "toastr.addDepartment.success.message": "New department is added successfully.",
-      "toastr.addDepartment.error.message": "New department is not added successfully."
+      "button.update": "Update",
+      "toastr.addDepartment.success.message": "Department of {{departmentName}} is added successfully.",
+      "toastr.addDepartment.error.message": "Department of {{departmentName}} is not added successfully.",
+      "toastr.updateDepartment.success.message": "Department with {{departmentId}} is updated as {{departmentName}} successfully.",
+      "toastr.updateDepartment.error.message": "Department with {{departmentId}} is not updated as {{departmentName}} successfully."
     }
   },
 

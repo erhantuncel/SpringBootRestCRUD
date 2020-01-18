@@ -17,7 +17,6 @@
   },
 
   "DEPARTMENT": {
-    "list.title": "Departman Listesi",
     "list.table.title.no": "No",
     "list.table.title.department": "Departman",
     "list.table.title.actions": "İşlemler",
@@ -25,16 +24,21 @@
     "list.table.row.button.delete": "Sil",
     "list.table.label.entryCount": "Kayıt sayısı",
     "button.addDepartment": "Departman Ekle",
-    "ADDDEPARTMENTMODAL": {
-      "title": "Departman Ekle",
-      "label.departmentName": "Departman Adı",
+    "ADDUPDATEDEPARTMENTMODAL": {
+      "title.add": "Departman Ekle",
+      "title.update": "Departman Güncelle",
+      "label.departmentId": "No",
+      "label.departmentName": "Departman",
       "invalid.message.required": "Boş olmamalı.",
       "invalid.message.minlength": "En az {{characterCount}} karakter olmalı.",
       "invalid.message.maxlength": "En fazla {{characterCount}} karakter olmalı.",
       "button.cancel": "Vazgeç",
       "button.add": "Ekle",
-      "toastr.addDepartment.success.message": "Yeni departman ekleme başarılı.",
-      "toastr.addDepartment.error.message": "Yeni departman ekleme başarısız."
+      "button.update": "Güncelle",
+      "toastr.addDepartment.success.message": "{{departmentName}} departmanı eklendi.",
+      "toastr.addDepartment.error.message": "{{departmentName}} departmanı eklenemedi.",
+      "toastr.updateDepartment.success.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellendi.",
+      "toastr.updateDepartment.error.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellenemedi."
     }
   },
 

@@ -1,32 +1,40 @@
 <div class="container">
   <div class="row mt-3 mb-2 justify-content-between">
     <div class="col-sm-3 text-left">
-      <h4>{{ "DEPARTMENT.list.title" | translate }}</h4>
+      <button class="btn btn-dark float-sm-left " role="button"
+          (click)="showAddUpdateDepartmentDialogComponent()">
+        {{ "DEPARTMENT.button.addDepartment" | translate }}
+      </button>
     </div>
     <div class="col-sm-6 text-right">
-
+      <form action="#" class="form-inline float-sm-right">
+        <input class="form-control mr-sm-1" type="text">
+        <button class="btn btn-dark my-2 my-sm-0" type="submit">Ara</button>
+      </form>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-12">
       <table #example class="table" style="width:100%">
-          <thead class="table-dark">
-              <tr>
-                <th style="width: 8%;">{{ "DEPARTMENT.list.table.title.no" | translate }}</th>
-                <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
-                <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let department of data | paginate: config" >
-                <td style="width: 8%;">{{department.id}}</td>
-                <td>{{department.departmentName}}</td>
-                <td style="width: 17%;">
-                  <button type="button" class="btn btn-dark mr-1">{{ "DEPARTMENT.list.table.row.button.update" | translate }}</button>
-                  <button type="button" class="btn btn-dark">{{ "DEPARTMENT.list.table.row.button.delete" | translate }}</button>
-                </td>
-              </tr>
-            </tbody>
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 8%;">{{ "DEPARTMENT.list.table.title.no" | translate }}</th>
+            <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
+            <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let department of data | paginate: config" >
+            <td style="width: 8%;">{{department.id}}</td>
+            <td>{{department.departmentName}}</td>
+            <td style="width: 17%;">
+              <button type="button" class="btn btn-dark float-sm-right">{{ "DEPARTMENT.list.table.row.button.delete" | translate }}</button>
+              <button type="button" class="btn btn-dark mr-1 float-sm-right" (click)="showAddUpdateDepartmentDialogComponent(department.id, department.departmentName)">
+                {{ "DEPARTMENT.list.table.row.button.update" | translate }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -54,50 +62,4 @@
       </pagination-template>
     </div>
   </div>
-  <div class="row">
-    <button class="btn btn-success float-sm-right ml-1" role="button"
-        (click)="showAddDepartmentDialog(addDepartmentModalTemplate)">
-      {{ "DEPARTMENT.button.addDepartment" | translate }}
-    </button>
-  </div>
-
-  <ng-template #addDepartmentModalTemplate>
-    <form [formGroup]="addDepartmentForm" (ngSubmit)="onSubmitAddDepartment(addDepartmentForm.value)" >
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">{{ "DEPARTMENT.ADDDEPARTMENTMODAL.title" | translate }}</h4>
-      <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="addDepartmentModal.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button> -->
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label for="departmentName">{{ "DEPARTMENT.ADDDEPARTMENTMODAL.label.departmentName" | translate }}</label>
-        <input id="name" type="text" class="form-control" required formControlName="departmentName"
-          [ngClass]="{'is-invalid': (departmentName.invalid && (departmentName.dirty || departmentName.touched)),
-                      'is-valid': (departmentName.valid && (departmentName.dirty || departmentName.touched))}">
-        <div *ngIf="!departmentName.errors" class="valid-feedback"></div>
-        <div *ngIf="departmentName.errors" class="invalid-feedback">
-          <div *ngIf="departmentName.errors.required">
-            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.required" | translate }}
-          </div>
-          <div *ngIf="departmentName.errors.minlength">
-            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.minlength" | translate:{characterCount: departmentNameMinLength} }}
-          </div>
-          <div *ngIf="departmentName.errors.maxlength">
-            {{ "DEPARTMENT.ADDDEPARTMENTMODAL.invalid.message.maxlength" | translate:{characterCount: departmentNameMaxLength} }}
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-danger" (click)="addDepartmentModal.hide()" type="button" >
-        {{ "DEPARTMENT.ADDDEPARTMENTMODAL.button.cancel" | translate }}
-      </button>
-      <button class="btn btn-primary">
-        {{ "DEPARTMENT.ADDDEPARTMENTMODAL.button.add" | translate }}
-      </button>
-    </div>
-    </form>
-  </ng-template>
 </div>

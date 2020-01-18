@@ -1,0 +1,49 @@
+<form [formGroup]="addDepartmentForm" (ngSubmit)="onSubmitAddDepartment(addDepartmentForm.value)" >
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="addDepartmentModal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body m-2">
+    <div class="form-group row"  *ngIf="departmentId">
+      <label for="departmentId" class="col-sm-4 col-form-label">
+        {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.label.departmentId" | translate }}
+      </label>
+      <div class="col-sm-8">
+        <input id="id" type="text" class="form-control" formControlName="idControl">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="departmentName" class="col-sm-4 col-form-label">
+        {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.label.departmentName" | translate }}
+      </label>
+      <div class="col-sm-8">
+
+        <input id="name" type="text" class="form-control" required formControlName="departmentName"
+          [ngClass]="{'is-invalid': (departmentName.invalid && (departmentName.dirty || departmentName.touched)),
+                      'is-valid': (departmentName.valid && (departmentName.dirty || departmentName.touched))}">
+        <div *ngIf="!departmentName.errors" class="valid-feedback"></div>
+        <div *ngIf="departmentName.errors" class="invalid-feedback">
+          <div *ngIf="departmentName.errors.required">
+            {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.invalid.message.required" | translate }}
+          </div>
+          <div *ngIf="departmentName.errors.minlength">
+            {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.invalid.message.minlength" | translate:{characterCount: departmentNameMinLength} }}
+          </div>
+          <div *ngIf="departmentName.errors.maxlength">
+            {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.invalid.message.maxlength" | translate:{characterCount: departmentNameMaxLength} }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="onClickCancel()" type="button" >
+      {{ "DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.button.cancel" | translate }}
+    </button>
+    <button class="btn btn-primary">
+      {{buttonLabel}}
+    </button>
+  </div>
+  </form>

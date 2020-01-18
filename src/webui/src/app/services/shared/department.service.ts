@@ -52,7 +52,7 @@ export class DepartmentService {
 
 
   getById(id): Observable<any> {
-    return this.apiService.get(this.DEPARTMENT_PATH, id).pipe(map(
+    return this.apiService.get(this.DEPARTMENT_PATH + '/' + id).pipe(map(
       response => {
         if (response) {
           return response;
@@ -77,8 +77,8 @@ export class DepartmentService {
     ));
   }
 
-  update(id): Observable<any> {
-    return this.apiService.put(this.DEPARTMENT_PATH, id).pipe(map(
+  update(id, department): Observable<any> {
+    return this.apiService.put(this.DEPARTMENT_PATH + '/' + id, department).pipe(map(
       response => {
         if (response) {
           return response;
