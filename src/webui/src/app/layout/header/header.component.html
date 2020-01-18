@@ -6,10 +6,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <!--
-            <a class="nav-link" href="#">Personel <span class="sr-only">(current)</span></a>
-          -->
+      <li class="nav-item" [ngClass]="{active: (currentURL === '/department')}">
+          <a class="nav-link" href="/department">
+            {{ "TEMPLATE.HEADER.NAVBAR.link.department.label" | translate }}
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item" [ngClass]="{active: (currentURL === '/staff')}" >
+          <a class="nav-link" href="/staff">
+            {{ "TEMPLATE.HEADER.NAVBAR.link.staff.label" | translate }}
+            <span class="sr-only">(current)</span>
+          </a>
         </li>
       </ul>
       <ul class="navbar-nav">

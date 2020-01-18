@@ -6,7 +6,9 @@
   "TEMPLATE": {
     "HEADER": {
       "NAVBAR": {
-        "title": "Staff Information System"
+        "title": "Staff Information System",
+        "link.department.label": "Department",
+        "link.staff.label": "Staff"
       }
     },
 

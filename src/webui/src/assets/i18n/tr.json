@@ -6,7 +6,9 @@
   "TEMPLATE": {
     "HEADER": {
       "NAVBAR": {
-        "title": "Personel Bilgi Sistemi"
+        "title": "Personel Bilgi Sistemi",
+        "link.department.label": "Departman",
+        "link.staff.label": "Personel"
       }
     },
 
