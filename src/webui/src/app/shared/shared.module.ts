@@ -3,19 +3,26 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
+import { ConfirmationmodalComponent } from './confirmationmodal/confirmationmodal.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ConfirmationmodalComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    ModalModule.forRoot()
   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    ModalModule
+    ModalModule,
+    ConfirmationmodalComponent
+  ],
+  entryComponents: [
+    ConfirmationmodalComponent
   ]
 })
 export class SharedModule { }
