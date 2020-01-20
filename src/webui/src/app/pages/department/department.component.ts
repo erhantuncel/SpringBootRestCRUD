@@ -109,8 +109,8 @@ export class DepartmentComponent implements OnInit {
                 this.toastr.error(deleteMessageResponse);
               }
             });
+          this.getPage(1);
         });
-        this.getPage(1);
       } else {
         console.log('No button is clicked.');
       }
