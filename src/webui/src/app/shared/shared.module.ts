@@ -12,7 +12,8 @@ import { ConfirmationmodalComponent } from './confirmationmodal/confirmationmoda
   ],
   imports: [
     CommonModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    TranslateModule
   ],
   exports: [
     FormsModule,

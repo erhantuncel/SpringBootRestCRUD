@@ -4,7 +4,7 @@
 
 table tbody {
   display: block;
-  height: 54vh;
+  height: 50vh;
   overflow-y: scroll;
 }
 

@@ -64,14 +64,14 @@ export class DepartmentService {
     ));
   }
 
-  delete(id) {
-    return this.apiService.delete(this.DEPARTMENT_PATH, id).pipe(map(
+  delete(id): Observable<any> {
+    return this.apiService.delete(this.DEPARTMENT_PATH + '/' + id).pipe(map(
       response => {
-        if (response) {
-          return response;
+        if (response === null) {
+          return true;
         } else {
           console.log(response);
-          return {};
+          return false;
         }
       }
     ));

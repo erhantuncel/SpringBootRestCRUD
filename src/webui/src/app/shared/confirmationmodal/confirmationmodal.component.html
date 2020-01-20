@@ -1,0 +1,21 @@
+<form>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      {{headerTitleText}}
+    </h4>
+  </div>
+
+  <div class="modal-body">
+    <p [innerHTML]="warningMessage" ></p>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="onClickNo()" type="button" >
+      {{ "DEPARTMENT.DELETECONFIRMATIONMODAL.button.no" | translate }}
+    </button>
+    <button class="btn btn-secondary" (click)="onClickYes()" type="button">
+      {{ "DEPARTMENT.DELETECONFIRMATIONMODAL.button.yes" | translate }}
+    </button>
+  </div>
+
+</form>

@@ -24,8 +24,11 @@
     "list.table.title.actions": "İşlemler",
     "list.table.row.button.update": "Güncelle",
     "list.table.row.button.delete": "Sil",
-    "list.table.label.entryCount": "Kayıt sayısı",
+    "list.table.label.entryCount1": "Sayfada",
+    "list.table.label.entryCount2": "kayıt göster",
+    "list.table.label.entryInformation": "{{totalEntry}} kayıttan {{rangeStart}}-{{rangeEnd}} arasındaki kayıtlar gösteriliyor.",
     "button.addDepartment": "Departman Ekle",
+    "button.searchDepartment": "Ara",
     "ADDUPDATEDEPARTMENTMODAL": {
       "title.add": "Departman Ekle",
       "title.update": "Departman Güncelle",
@@ -41,6 +44,14 @@
       "toastr.addDepartment.error.message": "{{departmentName}} departmanı eklenemedi.",
       "toastr.updateDepartment.success.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellendi.",
       "toastr.updateDepartment.error.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellenemedi."
+    },
+    "DELETECONFIRMATIONMODAL": {
+      "header.title": "Departman Silme Onay",
+      "warningMessage": "<strong>{{departmentId}}</strong> numaralı <strong>{{departmentName}}</strong> departmanını veritabanından silmek istiyor musunuz?",
+      "toastr.deleteDepartment.success.message": "{{departmentId}} numaralı {{departmentName}} departmanı silindi.",
+      "toastr.deleteDepartment.error.message": "{{departmentId}} numaralı {{departmentName}} departmanı silinemedi.",
+      "button.yes": "Evet",
+      "button.no": "Hayır"
     }
   },
 

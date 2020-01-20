@@ -48,6 +48,6 @@ export class ApiService {
   }
 
   private formatError(error: any) {
-    return of(environment.API_BASE_PATH + error.error);
+    return of(environment.API_BASE_PATH + ' - ' + error.error);
   }
 }

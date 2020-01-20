@@ -24,8 +24,11 @@
     "list.table.title.actions": "Actions",
     "list.table.row.button.update": "Update",
     "list.table.row.button.delete": "Delete",
-    "list.table.label.entryCount": "Entry Count",
+    "list.table.label.entryCount1": "Show",
+    "list.table.label.entryCount2": "entries",
+    "list.table.label.entryInformation": "Showing {{rangeStart}} to {{rangeEnd}} of {{totalEntry}} entries.",
     "button.addDepartment": "Add Department",
+    "button.searchDepartment": "Search",
     "ADDUPDATEDEPARTMENTMODAL": {
       "title.add": "Add Department",
       "title.update": "Update Department",
@@ -39,8 +42,16 @@
       "button.update": "Update",
       "toastr.addDepartment.success.message": "Department of {{departmentName}} is added successfully.",
       "toastr.addDepartment.error.message": "Department of {{departmentName}} is not added successfully.",
-      "toastr.updateDepartment.success.message": "Department with {{departmentId}} is updated as {{departmentName}} successfully.",
-      "toastr.updateDepartment.error.message": "Department with {{departmentId}} is not updated as {{departmentName}} successfully."
+      "toastr.updateDepartment.success.message": "Department with id {{departmentId}} is updated as {{departmentName}} successfully.",
+      "toastr.updateDepartment.error.message": "Department with id {{departmentId}} is not updated as {{departmentName}} successfully."
+    },
+    "DELETECONFIRMATIONMODAL": {
+      "header.title": "Delete Department Confirmation",
+      "warningMessage": "Do you want to delete Department of <strong>{{departmentName}}</strong> with id <strong>{{departmentId}}</strong> from database?",
+      "toastr.deleteDepartment.success.message": "Department of {{departmentName}} with id {{departmentId}} is deleted.",
+      "toastr.deleteDepartment.error.message": "Department of {{departmentName}} with id {{departmentId}} is not deleted.",
+      "button.yes": "Yes",
+      "button.no": "No"
     }
   },
 
