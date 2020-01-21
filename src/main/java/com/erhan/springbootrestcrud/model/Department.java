@@ -42,7 +42,7 @@ public class Department {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "department", fetch = FetchType.EAGER, 
-			   cascade = CascadeType.ALL, orphanRemoval = true)
+			   cascade = CascadeType.PERSIST)
 	private Set<Staff> staffList = new HashSet<>();
 	
 	

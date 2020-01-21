@@ -28,7 +28,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		log.debug("Exception trace = " + ex.getStackTrace());
 		List<String> details = new ArrayList<String>();
 		details.add(ex.getMessage());
-		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), "Server Error", details);
+		String type = ex.getClass().getSimpleName();
+		String cause = ex.getCause().getClass().getSimpleName();
+		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), "Server Error", type, cause, details);
 		return new ResponseEntity<Object>(apiErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -43,7 +45,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 			}
 			details.add(error.getDefaultMessage());
 		}
-		ApiErrorResponse errorResponse = new ApiErrorResponse(new Date(), "Validation Error", details);
+		String type = ex.getClass().getSimpleName();
+		String cause = ex.getCause().getClass().getSimpleName();
+		ApiErrorResponse errorResponse = new ApiErrorResponse(new Date(), "Validation Error", type, cause, details);
 		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	

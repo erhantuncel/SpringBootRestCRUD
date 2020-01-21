@@ -18,5 +18,7 @@ public class ApiErrorResponse {
 	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="Europe/Istanbul")
 	private Date date;
 	private String message;
+	private String type;
+	private String cause;
 	private List<String> details;
 }
