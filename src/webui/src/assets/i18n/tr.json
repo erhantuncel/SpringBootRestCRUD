@@ -50,6 +50,7 @@
       "warningMessage": "<strong>{{departmentId}}</strong> numaralı <strong>{{departmentName}}</strong> departmanını veritabanından silmek istiyor musunuz?",
       "toastr.deleteDepartment.success.message": "{{departmentId}} numaralı {{departmentName}} departmanı silindi.",
       "toastr.deleteDepartment.error.message": "{{departmentId}} numaralı {{departmentName}} departmanı silinemedi.",
+      "toastr.deleteDepartment.error.constraintViolation.message": "{{departmentId}} numaralı {{departmentName}} departmanında kayıtlı personel olduğundan silinemedi.",
       "button.yes": "Evet",
       "button.no": "Hayır"
     }

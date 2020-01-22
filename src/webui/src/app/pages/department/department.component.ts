@@ -99,16 +99,20 @@ export class DepartmentComponent implements OnInit {
       if (isYes) {
         console.log('Yes button is clicked.');
         this.departmentService.delete(depId).subscribe(deleteResponse => {
-          console.log('Delete response = ' + deleteResponse);
+          console.log('Delete response type = ' + deleteResponse.type);
+          console.log('Delete response cause = ' + deleteResponse.cause);
           this.translate.get('DEPARTMENT.DELETECONFIRMATIONMODAL.toastr.deleteDepartment.'
-                              + (deleteResponse ? 'success' : 'error') + '.message',
-                            {departmentId: depId, departmentName: depName}).subscribe(deleteMessageResponse => {
-              if (deleteResponse) {
-                this.toastr.success(deleteMessageResponse);
-              } else {
-                this.toastr.error(deleteMessageResponse);
-              }
-            });
+            + (deleteResponse.status === 200 ? 'success' : 'error')
+            + (deleteResponse.type === 'DataIntegrityViolationException'
+                && deleteResponse.cause === 'ConstraintViolationException' ? '.constraintViolation' : '')
+            + '.message',
+          {departmentId: depId, departmentName: depName}).subscribe(deleteMessageResponse => {
+            if (deleteResponse.status === 200) {
+              this.toastr.success(deleteMessageResponse);
+            } else {
+              this.toastr.error(deleteMessageResponse);
+            }
+          });
           this.getPage(1);
         });
       } else {

@@ -43,11 +43,11 @@ export class ApiService {
   delete(path: string, params: HttpParams = new HttpParams()): Observable<any> {
     return this.http.delete(
       environment.API_BASE_PATH + path,
-      {params}
+      {observe: 'response', params}
     ).pipe(catchError(this.formatError));
   }
 
   private formatError(error: any) {
-    return of(environment.API_BASE_PATH + ' - ' + error.error);
+    return of({type: error.error.type, cause: error.error.cause});
   }
 }

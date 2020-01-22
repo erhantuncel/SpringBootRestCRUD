@@ -50,6 +50,7 @@
       "warningMessage": "Do you want to delete Department of <strong>{{departmentName}}</strong> with id <strong>{{departmentId}}</strong> from database?",
       "toastr.deleteDepartment.success.message": "Department of {{departmentName}} with id {{departmentId}} is deleted.",
       "toastr.deleteDepartment.error.message": "Department of {{departmentName}} with id {{departmentId}} is not deleted.",
+      "toastr.deleteDepartment.error.constraintViolation.message": "Department of {{departmentName}} with id {{departmentId}} is not deleted because of there were registered staffs.",
       "button.yes": "Yes",
       "button.no": "No"
     }

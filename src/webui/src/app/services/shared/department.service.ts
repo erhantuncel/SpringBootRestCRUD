@@ -67,11 +67,11 @@ export class DepartmentService {
   delete(id): Observable<any> {
     return this.apiService.delete(this.DEPARTMENT_PATH + '/' + id).pipe(map(
       response => {
-        if (response === null) {
-          return true;
+        if (response) {
+          return response;
         } else {
           console.log(response);
-          return false;
+          return {};
         }
       }
     ));
