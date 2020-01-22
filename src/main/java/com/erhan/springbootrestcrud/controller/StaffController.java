@@ -11,6 +11,7 @@ import javax.validation.Validator;
 import org.hibernate.hql.internal.ast.InvalidPathException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @SwaggerDefinition(tags = {
 		@Tag(name = "Staff Resource", description = "Staff APIs")
 })
+@CrossOrigin
 public class StaffController {
 
 	private final StaffService staffService;
