@@ -21,16 +21,20 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 @Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
+	
 	@ExceptionHandler({Exception.class})
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		log.info("Exception message = " + ex.getMessage());
 		log.debug("Exception trace = " + ex.getStackTrace());
+		String message = "Server Error";
 		List<String> details = new ArrayList<String>();
 		details.add(ex.getMessage());
 		String type = ex.getClass().getSimpleName();
-		String cause = ex.getCause().getClass().getSimpleName();
-		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), "Server Error", type, cause, details);
+		String cause = null;
+		if(ex.getCause() != null) {			
+			cause = ex.getCause().getClass().getSimpleName();
+		}
+		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(new Date(), message, type, cause, details);
 		return new ResponseEntity<Object>(apiErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
