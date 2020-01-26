@@ -1,8 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { DepartmentService } from './../../../services/shared/department.service';
 import { BsModalRef } from 'ngx-bootstrap';
-import { Subject } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 
@@ -13,16 +12,16 @@ import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms'
 })
 export class AddupdatedepartmentComponent implements OnInit {
 
-  public onAction: Subject<string>;
-
-  addDepartmentModal: BsModalRef;
   addDepartmentForm: FormGroup;
+  @Output() event: EventEmitter<any> = new EventEmitter<any>();
+
   departmentId: number;
   departmentNameStatus: string;
   title: string;
   buttonLabel: string;
   departmentNameMinLength = 3;
   departmentNameMaxLength = 100;
+
 
   constructor(private departmentService: DepartmentService,
               private translate: TranslateService,
@@ -31,7 +30,6 @@ export class AddupdatedepartmentComponent implements OnInit {
               private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.onAction = new Subject();
     this.addDepartmentForm = this.formBuilder.group({
       departmentName: new FormControl(this.departmentNameStatus,
               [Validators.required,
@@ -56,7 +54,6 @@ export class AddupdatedepartmentComponent implements OnInit {
   }
 
   onSubmitAddDepartment(departmentValue) {
-    this.onAction.next('saveOrUpdate');
     if (!this.addDepartmentForm.valid) {
       console.log('onSubmitAddDepartment - addDepartmentForm is not valid.');
       return;
@@ -65,6 +62,7 @@ export class AddupdatedepartmentComponent implements OnInit {
       this.departmentService.update(this.departmentId, departmentValue).subscribe(
         response => {
           if (response.id != null && response.departmentName === this.departmentName.value) {
+            this.event.emit('OK');
             this.closeModal();
             this.translate.get('DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.toastr.updateDepartment.success.message',
                                 {departmentId: this.departmentId, departmentName: this.departmentName.value})
@@ -85,17 +83,18 @@ export class AddupdatedepartmentComponent implements OnInit {
       this.departmentService.create(departmentValue).subscribe(
         response => {
           if (response.id != null && response.departmentName === this.departmentName.value) {
+            this.event.emit('OK');
             this.closeModal();
             this.translate.get('DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.toastr.addDepartment.success.message',
                                 {departmentName: this.departmentName.value}).subscribe(successResponse => {
                 this.toastr.success(successResponse);
               });
           } else {
+            this.closeModal();
             this.translate.get('DEPARTMENT.ADDUPDATEDEPARTMENTMODAL.toastr.addDepartment.error.message',
                                 {departmentId: this.departmentId, departmentName: this.departmentName.value}).subscribe(dangerResponse => {
               this.toastr.error(dangerResponse);
             });
-            this.closeModal();
           }
         }
       );
@@ -103,7 +102,7 @@ export class AddupdatedepartmentComponent implements OnInit {
   }
 
   onClickCancel() {
-    this.onAction.next('cancel');
+    this.event.emit('Cancel');
     this.closeModal();
   }
 

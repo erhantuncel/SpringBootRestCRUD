@@ -66,8 +66,8 @@ export class DepartmentComponent implements OnInit {
     };
 
     this.addUpdateDepartmentModal = this.modalService.show(AddupdatedepartmentComponent, config);
-    this.addUpdateDepartmentModal.content.onAction.subscribe((actionType: string) => {
-      if (actionType === 'saveOrUpdate') {
+    this.addUpdateDepartmentModal.content.event.subscribe(result => {
+      if (result === 'OK') {
         this.getPage(1);
       }
     });
