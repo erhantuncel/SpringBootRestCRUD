@@ -34,6 +34,7 @@
           <tr>
             <th style="width: 8%;">{{ "DEPARTMENT.list.table.title.no" | translate }}</th>
             <th>{{ "DEPARTMENT.list.table.title.department" | translate }}</th>
+            <th>{{ "DEPARTMENT.list.table.title.staffCount" | translate }}</th>
             <th style="width: 17%;">{{ "DEPARTMENT.list.table.title.actions" | translate }}</th>
           </tr>
         </thead>
@@ -41,6 +42,7 @@
           <tr *ngFor="let department of data | paginate: config" >
             <td style="width: 8%;">{{department.id}}</td>
             <td>{{department.departmentName}}</td>
+            <td>{{department.staffList.length}}</td>
             <td style="width: 17%;">
               <button type="button" class="btn btn-dark float-sm-right" (click)="showDeleteDepartmentConfirmationModalComponent(department.id, department.departmentName)" >
                 {{ "DEPARTMENT.list.table.row.button.delete" | translate }}

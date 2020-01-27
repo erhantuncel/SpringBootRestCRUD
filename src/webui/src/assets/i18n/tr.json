@@ -21,6 +21,7 @@
   "DEPARTMENT": {
     "list.table.title.no": "No",
     "list.table.title.department": "Departman",
+    "list.table.title.staffCount": "Personel Sayısı",
     "list.table.title.actions": "İşlemler",
     "list.table.row.button.update": "Güncelle",
     "list.table.row.button.delete": "Sil",

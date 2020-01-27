@@ -21,6 +21,7 @@
   "DEPARTMENT": {
     "list.table.title.no": "Id",
     "list.table.title.department": "Department",
+    "list.table.title.staffCount": "Staff Count",
     "list.table.title.actions": "Actions",
     "list.table.row.button.update": "Update",
     "list.table.row.button.delete": "Delete",
