@@ -58,6 +58,18 @@
   },
 
   "STAFF": {
+    "list.table.title.no": "Id",
+    "list.table.title.firstName": "First Name",
+    "list.table.title.lastName": "Last Name",
+    "list.table.title.departmentName": "Department",
+    "list.table.title.registeredDate": "Create Date",
+    "list.table.title.actions": "Actions",
+    "list.table.row.button.update": "Update",
+    "list.table.row.button.delete": "Delete",
+    "list.table.label.entryCount1": "Show",
+    "list.table.label.entryCount2": "entries",
+    "list.table.label.entryInformation": "Showing {{rangeStart}} to {{rangeEnd}} of {{totalEntry}} entries.",
+    "button.searchDepartment": "Search",
     "button.addStaff": "Add Staff"
   }
 }

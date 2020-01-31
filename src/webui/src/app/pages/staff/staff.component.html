@@ -1,7 +1,89 @@
 <div class="container">
-  <div class="row mb-0 mt-1">
+  <div class="row mt-3">
+    <div class="col-sm-3 text-left">
+      <button class="btn btn-dark float-sm-left " role="button"
+          >
+        {{ "STAFF.button.addStaff" | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="row mt-2 mb-2 justify-content-between">
+    <div class="col-sm-3 text-left">
+      {{"STAFF.list.table.label.entryCount1" | translate }}&nbsp;
+      <select #pageSizeSelect [(ngModel)]="pageSize" class="custom-select" style="width: auto;"
+          name="pageSizeSelect" (change)="onPageSizeSelected(pageSizeSelect.value)">
+        <option *ngFor="let pageSizeOption of pageSizeOptions" [value]="pageSizeOption">
+          {{ pageSizeOption }}
+        </option>
+      </select>
+      &nbsp;{{"STAFF.list.table.label.entryCount2" | translate }}
+    </div>
+    <div class="col-sm-6 text-right">
+      <!-- <form action="#" class="form-inline float-sm-right">
+        <input class="form-control mr-sm-1" type="text">
+        <button class="btn btn-dark my-2 my-sm-0" type="submit">
+          {{ "STAFF.button.searchDepartment" | translate }}
+        </button>
+      </form> -->
+    </div>
+  </div>
+  <div class="row">
     <div class="col-sm-12">
+      <div>
 
+        <table #example class="table" style="width:100%">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 5%;">{{ "STAFF.list.table.title.no" | translate }}</th>
+              <th>{{ "STAFF.list.table.title.firstName" | translate }}</th>
+              <th>{{ "STAFF.list.table.title.lastName" | translate }}</th>
+              <th>{{ "STAFF.list.table.title.departmentName" | translate }}</th>
+              <th>{{ "STAFF.list.table.title.registeredDate" | translate }}</th>
+              <th style="width: 17%;">{{ "STAFF.list.table.title.actions" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let staff of data | paginate: config" >
+              <td class="align-middle" style="width: 5%;">{{staff.id}}</td>
+              <td class="align-middle">{{staff.firstName}}</td>
+              <td class="align-middle">{{staff.lastName}}</td>
+              <td class="align-middle">{{staff.department.departmentName}}</td>
+              <td class="align-middle">{{staff.createDate}}</td>
+              <td class="align-middle" style="width: 17%;">
+                <button type="button" class="btn btn-dark float-sm-right" >
+                  {{ "STAFF.list.table.row.button.delete" | translate }}
+                </button>
+                <button type="button" class="btn btn-dark mr-1 float-sm-right">
+                  {{ "STAFF.list.table.row.button.update" | translate }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5">
+      {{ 'STAFF.list.table.label.entryInformation' |
+            translate: {totalEntry: config.totalItems,
+                        rangeStart: config.currentPage*config.itemsPerPage-(config.itemsPerPage-1),
+                        rangeEnd: p.isLastPage() ? config.totalItems : (config.currentPage*config.itemsPerPage)
+            }
+       }}
+    </div>
+    <div class="col-sm-7">
+      <pagination-template #p="paginationApi" (pageChange)="getPage($event)">
+        <nav>
+          <ul class="pagination justify-content-end">
+            <li *ngFor="let page of p.pages" class="page-item" [class.active]="p.getCurrent() === page.value">
+                <a (click)="p.setCurrent(page.value)" class="page-link" [routerLink]="">
+                    {{ page.label }} <span class="sr-only">(current)</span>
+                </a>
+            </li>
+          </ul>
+        </nav>
+      </pagination-template>
     </div>
   </div>
 </div>

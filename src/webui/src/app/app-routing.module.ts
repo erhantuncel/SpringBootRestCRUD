@@ -7,9 +7,9 @@ import { AppLayoutComponent } from './layout';
 const routes: Routes = [{
   path: '', component: AppLayoutComponent,
   children:  [
-    {path: '', pathMatch: 'full', redirectTo: 'staff'},
+    {path: '', pathMatch: 'full', redirectTo: 'department'},
     {path: 'department', loadChildren: './pages/department/department.module#DepartmentModule'},
-    {path: 'staff', loadChildren: './pages/staff/staff.module#StaffModule'}
+    {path: 'department/:id/staff', loadChildren: './pages/staff/staff.module#StaffModule'}
   ]
 }];
 
