@@ -43,10 +43,16 @@ export class DepartmentComponent implements OnInit {
 
   getPage(page: number) {
     this.departmentService.getWithPagination({page: page - 1, size: this.config.itemsPerPage, sort: 'id'}).subscribe(response => {
-      console.log(response);
-      this.data = response.content;
-      this.config.currentPage = page;
-      this.config.totalItems = response.totalElements;
+      if (response.status === 200) {
+        console.log(response);
+        this.data = response.body.content;
+        this.config.currentPage = page;
+        this.config.totalItems = response.body.totalElements;
+      } else {
+        this.translate.get('DEPARTMENT.toastr.department.not.found').subscribe(getDepartmentResponse => {
+          this.toastr.error(getDepartmentResponse);
+        });
+      }
     });
   }
 

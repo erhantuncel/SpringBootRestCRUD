@@ -28,6 +28,7 @@
     "list.table.label.entryCount1": "Show",
     "list.table.label.entryCount2": "entries",
     "list.table.label.entryInformation": "Showing {{rangeStart}} to {{rangeEnd}} of {{totalEntry}} entries.",
+    "toastr.department.not.found": "Department not found.",
     "button.addDepartment": "Add Department",
     "button.searchDepartment": "Search",
     "ADDUPDATEDEPARTMENTMODAL": {

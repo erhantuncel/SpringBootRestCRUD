@@ -28,6 +28,7 @@
     "list.table.label.entryCount1": "Sayfada",
     "list.table.label.entryCount2": "kayıt göster",
     "list.table.label.entryInformation": "{{totalEntry}} kayıttan {{rangeStart}}-{{rangeEnd}} arasındaki kayıtlar gösteriliyor.",
+    "toastr.department.not.found": "Departman bulunamadı.",
     "button.addDepartment": "Departman Ekle",
     "button.searchDepartment": "Ara",
     "ADDUPDATEDEPARTMENTMODAL": {
