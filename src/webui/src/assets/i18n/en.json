@@ -23,6 +23,7 @@
     "list.table.title.department": "Department",
     "list.table.title.staffCount": "Staff Count",
     "list.table.title.actions": "Actions",
+    "list.table.row.button.staffList": "Staff List",
     "list.table.row.button.update": "Update",
     "list.table.row.button.delete": "Delete",
     "list.table.label.entryCount1": "Show",
@@ -70,7 +71,10 @@
     "list.table.label.entryCount1": "Show",
     "list.table.label.entryCount2": "entries",
     "list.table.label.entryInformation": "Showing {{rangeStart}} to {{rangeEnd}} of {{totalEntry}} entries.",
-    "button.searchDepartment": "Search",
-    "button.addStaff": "Add Staff"
+    "list.table.searchType.firstName": "First Name",
+    "list.table.searchType.lastName": "Last Name",
+    "list.table.button.searchStaff": "Search",
+    "button.addStaff": "Add Staff",
+    "toastr.staff.not.found": "Staff not found."
   }
 }

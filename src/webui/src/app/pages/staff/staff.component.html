@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="row mt-2 mb-2 justify-content-between">
-    <div class="col-sm-3 text-left">
+    <div class="col-sm-7 text-left">
       {{"STAFF.list.table.label.entryCount1" | translate }}&nbsp;
       <select #pageSizeSelect [(ngModel)]="pageSize" class="custom-select" style="width: auto;"
           name="pageSizeSelect" (change)="onPageSizeSelected(pageSizeSelect.value)">
@@ -18,13 +18,20 @@
       </select>
       &nbsp;{{"STAFF.list.table.label.entryCount2" | translate }}
     </div>
-    <div class="col-sm-6 text-right">
-      <!-- <form action="#" class="form-inline float-sm-right">
-        <input class="form-control mr-sm-1" type="text">
+    <div class="col-sm-5 text-right">
+      <form class="form-inline float-sm-right" #searchStaffForm="ngForm" (ngSubmit)="getPage(1)"  >
+        <select class="form-control mr-1" id="searchTypeSelect" name="searchTypeSelect" required
+                [(ngModel)]="searchTypeSelectValue" #searchTypeSelect="ngModel">
+          <option *ngFor="let type of searchTypes" [value]="type">
+            {{ 'STAFF.list.table.searchType.' + type | translate }}
+          </option>
+        </select>
+        <input class="form-control mr-sm-1" type="text" id="keyword" name="keywordInput"
+            [(ngModel)]="keywordInputValue" #keywordInput="ngModel" required minlength="{{keywordMinLength}}">
         <button class="btn btn-dark my-2 my-sm-0" type="submit">
-          {{ "STAFF.button.searchDepartment" | translate }}
+          {{ "STAFF.list.table.button.searchStaff" | translate }}
         </button>
-      </form> -->
+      </form>
     </div>
   </div>
   <div class="row">
@@ -43,6 +50,11 @@
             </tr>
           </thead>
           <tbody>
+            <tr *ngIf="data.length == 0">
+              <td colspan="6">
+                {{ 'STAFF.toastr.staff.not.found' | translate }}
+              </td>
+            </tr>
             <tr *ngFor="let staff of data | paginate: config" >
               <td class="align-middle" style="width: 5%;">{{staff.id}}</td>
               <td class="align-middle">{{staff.firstName}}</td>
@@ -65,12 +77,15 @@
   </div>
   <div class="row">
     <div class="col-sm-5">
+      <div class="m-0 p-0" *ngIf="data.length != 0">
       {{ 'STAFF.list.table.label.entryInformation' |
             translate: {totalEntry: config.totalItems,
                         rangeStart: config.currentPage*config.itemsPerPage-(config.itemsPerPage-1),
                         rangeEnd: p.isLastPage() ? config.totalItems : (config.currentPage*config.itemsPerPage)
             }
        }}
+
+      </div>
     </div>
     <div class="col-sm-7">
       <pagination-template #p="paginationApi" (pageChange)="getPage($event)">

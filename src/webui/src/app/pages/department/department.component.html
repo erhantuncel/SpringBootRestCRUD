@@ -39,6 +39,11 @@
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="data.length == 0">
+            <td colspan="4">
+              {{ 'DEPARTMENT.toastr.department.not.found' | translate }}
+            </td>
+          </tr>
           <tr *ngFor="let department of data | paginate: config" >
             <td class="align-middle" style="width: 8%;">{{department.id}}</td>
             <td class="align-middle">{{department.departmentName}}</td>
@@ -52,7 +57,7 @@
               </button>
               <a role="button" class="btn btn-dark mr-1 float-sm-right" [routerLink]="[department.id, 'staff']"
                   *ngIf="department.staffCount > 0" >
-                Personel Listesi
+                {{ "DEPARTMENT.list.table.row.button.staffList" | translate}}
               </a>
             </td>
           </tr>
@@ -62,12 +67,14 @@
   </div>
   <div class="row">
     <div class="col-sm-5">
-      {{ 'DEPARTMENT.list.table.label.entryInformation' |
-            translate: {totalEntry: config.totalItems,
-                        rangeStart: config.currentPage*config.itemsPerPage-(config.itemsPerPage-1),
-                        rangeEnd: p.isLastPage() ? config.totalItems : (config.currentPage*config.itemsPerPage)
-            }
-       }}
+      <div class="m-0 p-0" *ngIf="data.length != 0">
+        {{ 'DEPARTMENT.list.table.label.entryInformation' |
+              translate: {totalEntry: config.totalItems,
+                          rangeStart: config.currentPage*config.itemsPerPage-(config.itemsPerPage-1),
+                          rangeEnd: p.isLastPage() ? config.totalItems : (config.currentPage*config.itemsPerPage)
+              }
+         }}
+      </div>
     </div>
     <div class="col-sm-7">
       <pagination-template #p="paginationApi" (pageChange)="getPage($event)">
