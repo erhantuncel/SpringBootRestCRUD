@@ -1,3 +1,4 @@
+import { DepartmentService } from './../../services/shared/department.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { Component, OnInit, Input } from '@angular/core';
@@ -31,16 +32,19 @@ export class StaffComponent implements OnInit {
     sort: 'id',
   };
 
+  departments = [];
   searchTypes = ['firstName', 'lastName'];
   searchTypeSelectValue: string;
   keywordInputValue: string;
 
   constructor(private route: ActivatedRoute,
               private staffService: StaffService,
+              private departmentService: DepartmentService,
               private toastr: ToastrService,
               private translate: TranslateService) { }
 
   ngOnInit() {
+    this.populateDepartments();
     this.route.params.subscribe(params => {
       this.departmentId = params.id;
     });
@@ -75,8 +79,25 @@ export class StaffComponent implements OnInit {
     });
   }
 
+  populateDepartments() {
+    this.departmentService.getAll().subscribe(allDepartments => {
+      this.departments = allDepartments.body;
+    });
+  }
+
   onPageSizeSelected(selectedValue: any) {
     this.config.itemsPerPage = selectedValue;
+    this.getPage(1);
+  }
+
+  onDepartmentSelected() {
+    for (const searchType of this.searchTypes) {
+      if (this.queryParams.hasOwnProperty(searchType)) {
+        delete this.queryParams[searchType];
+      }
+    }
+    this.keywordInputValue = '';
+    this.data = [];
     this.getPage(1);
   }
 
