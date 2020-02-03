@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { Component, OnInit, Input } from '@angular/core';
 import { StaffService } from './../../services/shared/staff.service';
-import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -37,17 +36,14 @@ export class StaffComponent implements OnInit {
   searchTypeSelectValue: string;
   keywordInputValue: string;
 
-  constructor(private route: ActivatedRoute,
-              private staffService: StaffService,
+  constructor(private staffService: StaffService,
               private departmentService: DepartmentService,
               private toastr: ToastrService,
               private translate: TranslateService) { }
 
   ngOnInit() {
     this.populateDepartments();
-    this.route.params.subscribe(params => {
-      this.departmentId = params.id;
-    });
+    this.departmentId = 1;
     this.searchTypeSelectValue = this.searchTypes[0];
     this.config.itemsPerPage = Number(this.pageSize);
     this.getPage(1);

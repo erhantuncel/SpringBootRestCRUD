@@ -6,14 +6,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
-      <li class="nav-item" [ngClass]="{active: (currentURL === '/department')}">
-          <a class="nav-link" href="/department">
+      <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/department']">
             {{ "TEMPLATE.HEADER.NAVBAR.link.department.label" | translate }}
             <span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item" [ngClass]="{active: (currentURL === '/staff')}" >
-          <a class="nav-link" href="/staff">
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/staff']">
             {{ "TEMPLATE.HEADER.NAVBAR.link.staff.label" | translate }}
             <span class="sr-only">(current)</span>
           </a>

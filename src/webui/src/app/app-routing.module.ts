@@ -9,7 +9,7 @@ const routes: Routes = [{
   children:  [
     {path: '', pathMatch: 'full', redirectTo: 'department'},
     {path: 'department', loadChildren: './pages/department/department.module#DepartmentModule'},
-    {path: 'department/:id/staff', loadChildren: './pages/staff/staff.module#StaffModule'}
+    {path: 'staff', loadChildren: './pages/staff/staff.module#StaffModule'}
   ]
 }];
 

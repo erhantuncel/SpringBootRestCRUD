@@ -55,10 +55,6 @@
               <button type="button" class="btn btn-dark mr-1 float-sm-right" (click)="showAddUpdateDepartmentDialogComponent(department.id, department.departmentName)">
                 {{ "DEPARTMENT.list.table.row.button.update" | translate }}
               </button>
-              <a role="button" class="btn btn-dark mr-1 float-sm-right" [routerLink]="[department.id, 'staff']"
-                  *ngIf="department.staffCount > 0" >
-                {{ "DEPARTMENT.list.table.row.button.staffList" | translate}}
-              </a>
             </td>
           </tr>
         </tbody>
