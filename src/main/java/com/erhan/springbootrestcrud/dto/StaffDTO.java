@@ -49,7 +49,7 @@ public class StaffDTO {
 	@ApiModelProperty(value = "Image", required = false)
 	private byte[] image;
 	
-	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="Europe/Istanbul")
+	@JsonFormat(shape = Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss", timezone="Europe/Istanbul")
 	@ApiModelProperty(value = "Department", required = true)
 	private Date createDate;
 	private DepartmentDTO department;

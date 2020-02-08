@@ -71,7 +71,7 @@ public class Staff {
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
 	@Column(name = "CREATE_DATE")
-	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="Europe/Istanbul")
+	@JsonFormat(shape = Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss", timezone="Europe/Istanbul")
 	private Date createDate;
 	
 	
