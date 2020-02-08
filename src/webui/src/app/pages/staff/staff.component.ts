@@ -1,3 +1,5 @@
+import { AddupdatestaffmodalComponent } from './addupdatestaffmodal/addupdatestaffmodal.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DepartmentService } from './../../services/shared/department.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PaginationInstance } from 'ngx-pagination';
@@ -36,10 +38,13 @@ export class StaffComponent implements OnInit {
   searchTypeSelectValue: string;
   keywordInputValue: string;
 
+  addUpdateStaffModal: BsModalRef;
+
   constructor(private staffService: StaffService,
               private departmentService: DepartmentService,
               private toastr: ToastrService,
-              private translate: TranslateService) { }
+              private translate: TranslateService,
+              private modalService: BsModalService) { }
 
   ngOnInit() {
     this.populateDepartments();
@@ -100,5 +105,26 @@ export class StaffComponent implements OnInit {
   onSubmitSearchForm() {
     console.log('Search Type = ' + this.searchTypeSelectValue);
     console.log('keyWord = ' + this.keywordInputValue);
+  }
+
+  showAddUpdateStaffModalComponent(staffIdFromTable: number) {
+    const config =  {
+      initialState: {
+        departmentId: this.departmentId,
+        staffId: staffIdFromTable
+      },
+      class: 'modal-lg',
+      backdrop: true,
+      ignoreBackdropClick: true,
+    };
+
+    this.addUpdateStaffModal = this.modalService.show(AddupdatestaffmodalComponent, config);
+    this.addUpdateStaffModal.content.event.subscribe(result => {
+      if (result === 'OK') {
+        console.log('OK button clicked.');
+      } else if (result === 'Cancel') {
+        console.log('Cancel button clicked.');
+      }
+    });
   }
 }

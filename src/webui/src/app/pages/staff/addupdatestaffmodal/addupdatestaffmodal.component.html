@@ -1,0 +1,117 @@
+<form #addUpdateStaffForm="ngForm" (ngSubmit)="onSubmitAddDepartment(addStaffForm.value)" >
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ "STAFF.ADDUPDATEDETAILMODAL.title." + mode | translate }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()" *ngIf="mode === 'detail'" >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body m-2">
+    <div class="row">
+      <div class="col-lg-4 text-center pb-4">
+        <div class="row">
+          <div class="col-12">
+            <img [src]="staffImage ? staffImage : 'assets/img/no_profile_photo.jpg'"  height="200" width="200">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="button" class="btn btn-dark btn-sm mt-1" *ngIf="mode !== 'detail'">
+              Resim Değiştir
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="form-group row mb-1" *ngIf="mode !== 'add'">
+          <label for="inputId" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.staffId" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" class="form-control-plaintext" id="inputId" name="inputId"
+                    [(ngModel)]="staffId" #inputId=ngModel readonly>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="inputCreateDate" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.staffCreateDate" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" class="form-control-plaintext" id="inputCreateDate" name="inputCreateDate"
+                    [(ngModel)]="staffCreateDate" #inputCreateDate=ngModel readonly>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="inputFirstName" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.firstName" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" id="inputFirstName" name="inputFirstName" [(ngModel)]="staffFirstName" #inputFirstName = ngModel
+                  [ngClass]="{'form-control is-invalid': mode === 'update', 'form-control-plaintext': mode === 'detail'}"
+                  [readOnly]="mode === 'detail'? true : false">
+            <div class="invalid-feedback">Ad boş olmamalı</div>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="inputLastName" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.lastName" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" id="inputLastName" name="inputLastName" [(ngModel)]="staffLastName" #inputLastName=ngModel
+                  [ngClass]="{'form-control is-invalid': mode === 'update', 'form-control-plaintext': mode === 'detail'}"
+                  [readOnly]="mode === 'detail'? true : false">
+            <div class="invalid-feedback">Ad boş olmamalı</div>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="inputPhone" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.phone" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" id="inputPhone" name="inputPhone" [(ngModel)]="staffphone" #inputPhone=ngModel
+                  [ngClass]="{'form-control is-invalid': mode === 'update', 'form-control-plaintext': mode === 'detail'}"
+                  [readOnly]="mode === 'detail'? true : false">
+            <div class="invalid-feedback">Ad boş olmamalı</div>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="inputEmail" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.email" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" id="inputEmail" name="inputEmail" [(ngModel)]="staffEmail" #inputEmail=ngModel
+                  [ngClass]="{'form-control is-invalid': mode === 'update', 'form-control-plaintext': mode === 'detail'}"
+                  [readOnly]="mode === 'detail'? true : false">
+            <div class="invalid-feedback">Ad boş olmamalı</div>
+          </div>
+        </div>
+        <div class="form-group row mb-1">
+          <label for="selectDepartment" class="col-3 col-form-label">
+            {{ "STAFF.ADDUPDATEDETAILMODAL.label.department" | translate}}
+          </label>
+          <div class="col-9">
+            <input type="text" class="form-control-plaintext" id="inputDepartment" name="inputDepartment" readonly
+                    *ngIf="mode === 'detail'" [(ngModel)]="departmentName" #inputDepartment = ngModel>
+            <select class="form-control custom-select is-invalid" id="selectDepartment" name="selectDepartment"
+                    *ngIf="mode === 'update'" [(ngModel)]="departmentId" #selectDepartment = ngModel>
+              <option *ngFor="let department of departments" [value]="department.id" >
+                {{ department.departmentName }}
+              </option>
+            </select>
+            <div class="invalid-feedback">Ad boş olmamalı</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-dark pull-right" (click)="changeModeToUpdate()" *ngIf="mode !== 'update'"  >
+      {{ "STAFF.ADDUPDATEDETAILMODAL.button.update" | translate }}
+    </button>
+    <button class="btn btn-danger" (click)="onClickCancel()" type="button" *ngIf="mode !== 'detail'" >
+      {{ "STAFF.ADDUPDATEDETAILMODAL.button.cancel" | translate }}
+    </button>
+    <button class="btn btn-secondary" *ngIf="mode !== 'detail'" >
+      {{ "STAFF.ADDUPDATEDETAILMODAL.button.accept." + mode | translate }}
+    </button>
+  </div>
+</form>

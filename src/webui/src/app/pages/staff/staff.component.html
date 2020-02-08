@@ -20,14 +20,14 @@
     </div>
     <div class="col-sm-7 text-right">
       <form class="form-inline float-sm-right" #searchStaffForm="ngForm" (ngSubmit)="getPage(1)"  >
-          <select class="form-control mr-1" id="departmentId" name="departmentId"
+          <select class="form-control custom-select mr-1" id="departmentId" name="departmentId"
                   [(ngModel)]="departmentId" #departmentSelect="ngModel"
                   (change)="onDepartmentSelected()">
             <option *ngFor="let department of departments" [value]="department.id">
               {{ department.departmentName }}
             </option>
           </select>
-          <select class="form-control mr-1" id="searchTypeSelect" name="searchTypeSelect" required
+          <select class="form-control custom-select mr-1" id="searchTypeSelect" name="searchTypeSelect" required
                   [(ngModel)]="searchTypeSelectValue" #searchTypeSelect="ngModel">
             <option *ngFor="let type of searchTypes" [value]="type">
               {{ 'STAFF.list.table.searchType.' + type | translate }}
@@ -72,8 +72,8 @@
                 <button type="button" class="btn btn-dark float-sm-right" >
                   {{ "STAFF.list.table.row.button.delete" | translate }}
                 </button>
-                <button type="button" class="btn btn-dark mr-1 float-sm-right">
-                  {{ "STAFF.list.table.row.button.update" | translate }}
+                <button type="button" class="btn btn-dark mr-1 float-sm-right" (click)="showAddUpdateStaffModalComponent(staff.id)" >
+                  {{ "STAFF.list.table.row.button.detail" | translate }}
                 </button>
               </td>
             </tr>

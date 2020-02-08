@@ -65,7 +65,7 @@
     "list.table.title.departmentName": "Department",
     "list.table.title.registeredDate": "Create Date",
     "list.table.title.actions": "Actions",
-    "list.table.row.button.update": "Update",
+    "list.table.row.button.detail": "Detail",
     "list.table.row.button.delete": "Delete",
     "list.table.label.entryCount1": "Show",
     "list.table.label.entryCount2": "entries",
@@ -74,6 +74,22 @@
     "list.table.searchType.lastName": "Last Name",
     "list.table.button.searchStaff": "Search",
     "button.addStaff": "Add Staff",
-    "toastr.staff.not.found": "Staff not found."
+    "toastr.staff.not.found": "Staff not found.",
+    "ADDUPDATEDETAILMODAL": {
+      "title.add": "Add Staff",
+      "title.update": "Update Staff",
+      "title.detail": "Staff Details",
+      "label.staffId": "Id",
+      "label.staffCreateDate": "Create Date",
+      "label.firstName": "First Name",
+      "label.lastName": "Last Name",
+      "label.phone": "Phone",
+      "label.email": "E-mail",
+      "label.department": "Department",
+      "button.cancel": "Cancel",
+      "button.update": "Update",
+      "button.accept.add": "Add",
+      "button.accept.update": "Save"
+    }
   }
 }

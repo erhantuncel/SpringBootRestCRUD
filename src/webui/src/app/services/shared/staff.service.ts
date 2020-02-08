@@ -27,4 +27,18 @@ export class StaffService {
       }
     ));
   }
+
+  getByDepartmentIdAndStaffId(departmentId: number, staffId: number): Observable<any> {
+    return this.apiService.get(this.DEPARTMENT_PATH + '/' + departmentId +
+                               this.STAFF_PATH + '/' + staffId).pipe(map(
+        response => {
+          if (response) {
+            return response;
+          } else {
+            console.log(response);
+            return {};
+          }
+        }
+      ));
+  }
 }
