@@ -87,9 +87,10 @@ public class StaffServiceImpl implements StaffService {
 				throw new InvalidPathException("File path " + fileName +" is invalid ");
 			}			
 			staff.setImage(imageFile.getBytes());
-		} else {
-			staff.setImage(null);
-		}
+		} 
+//		else {
+//			staff.setImage(null);
+//		}
 		Department department = departmentDAO.findById(departmentId).orElse(null);
 		if(department == null) {
 			throw new NotFoundException("Department with id = " + departmentId + "  not found!");
@@ -108,6 +109,12 @@ public class StaffServiceImpl implements StaffService {
 		staffFromDb.setPhone(staffEntity.getPhone());
 		staffFromDb.setEmail(staffEntity.getEmail());
 		staffFromDb.setImage(staffEntity.getImage());
+		
+		Department departmentForSave = departmentDAO.findById(staffEntity.getDepartment().getId()).orElse(null);
+		if(departmentForSave != null) {
+			staffFromDb.setDepartment(departmentForSave);
+		}
+		
 		staffDAO.save(staffFromDb);
 		return modelMapper.map(staffFromDb, StaffDTO.class);
 	}

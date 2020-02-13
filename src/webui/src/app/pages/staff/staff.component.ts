@@ -120,8 +120,12 @@ export class StaffComponent implements OnInit {
 
     this.addUpdateStaffModal = this.modalService.show(AddupdatestaffmodalComponent, config);
     this.addUpdateStaffModal.content.event.subscribe(result => {
-      if (result === 'OK') {
-        console.log('OK button clicked.');
+      if (result === 'Updated') {
+        console.log('Staff is updated.');
+        this.getPage(1);
+      } else if (result === 'Added') {
+        console.log('Staff is added.');
+        this.getPage(1);
       } else if (result === 'Cancel') {
         console.log('Cancel button clicked.');
       }

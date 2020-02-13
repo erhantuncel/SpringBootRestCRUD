@@ -41,4 +41,18 @@ export class StaffService {
         }
       ));
   }
+
+  update(depId: number, staffId: number, data: FormData): Observable<any> {
+    return this.apiService.putWithFormData(this.DEPARTMENT_PATH + '/' + depId +
+                               this.STAFF_PATH + '/' + staffId, data).pipe(map(
+        response => {
+          if (response) {
+            return response;
+          } else {
+            console.log(response);
+            return {};
+          }
+        }
+    ));
+  }
 }

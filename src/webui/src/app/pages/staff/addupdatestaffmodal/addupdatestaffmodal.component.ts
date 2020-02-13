@@ -1,8 +1,11 @@
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { Department } from './../../../common/department';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { StaffService } from './../../../services/shared/staff.service';
+import { Staff } from './../../../common/staff';
 import { DepartmentService } from './../../../services/shared/department.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { FormGroup } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -12,36 +15,37 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class AddupdatestaffmodalComponent implements OnInit {
 
-  addStaffForm: FormGroup;
   @Output() event: EventEmitter<any> = new EventEmitter<any>();
 
   departmentId: number;
   staffId: number;
-  staffFirstName: string;
-  staffLastName: string;
-  staffphone: string;
-  staffEmail: string;
-  staffImage: SafeResourceUrl;
-  staffCreateDate: Date;
-  departmentName: string;
+  staff: Staff;
+  staffImageForSrc: SafeResourceUrl;
+  staffImageFile: File;
 
-  title: string;
-  acceptButtonLabel: string;
+  imageErrorMessage: string;
+  acceptedImageTypes = ['image/png', 'image/jpeg'];
 
   mode: string; // update, add, detail
   departments = [];
 
+  formData: FormData;
+
   constructor(private bsModalRef: BsModalRef,
               private departmentService: DepartmentService,
               private staffService: StaffService,
-              private domSanitize: DomSanitizer) { }
+              private domSanitize: DomSanitizer,
+              private toastr: ToastrService,
+              private translate: TranslateService) { }
 
   ngOnInit() {
+    this.staff = new Staff();
+    this.staff.id = this.staffId;
+    this.staff.department = new Department();
+    this.staff.department.id = this.departmentId;
     this.populateDepartments();
     this.populateStaffDetails();
     this.mode = 'detail';
-    this.title = 'Personel Bilgileri';
-    this.acceptButtonLabel = 'Güncelle';
   }
 
   populateDepartments() {
@@ -51,16 +55,18 @@ export class AddupdatestaffmodalComponent implements OnInit {
   }
 
   populateStaffDetails() {
-    this.staffService.getByDepartmentIdAndStaffId(this.departmentId, this.staffId).subscribe(staffResponse => {
-      this.staffFirstName = staffResponse.body.firstName;
-      this.staffLastName = staffResponse.body.lastName;
-      this.staffphone = staffResponse.body.phone;
-      this.staffEmail = staffResponse.body.email;
+    this.staffService.getByDepartmentIdAndStaffId(this.staff.department.id, this.staff.id).subscribe(staffResponse => {
+      this.staff.id = staffResponse.body.id;
+      this.staff.firstName = staffResponse.body.firstName;
+      this.staff.lastName = staffResponse.body.lastName;
+      this.staff.phone = staffResponse.body.phone;
+      this.staff.email = staffResponse.body.email;
+      this.staff.createDate = staffResponse.body.createDate;
       if (staffResponse.body.image) {
-        this.staffImage = this.domSanitize.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + staffResponse.body.image);
+        this.staff.image = staffResponse.body.image;
+        this.staffImageForSrc = this.createSafeResourceUrlForImage(this.staff.image);
       }
-      this.staffCreateDate = staffResponse.body.createDate;
-      this.departmentName = staffResponse.body.department.departmentName;
+      this.staff.department.departmentName = staffResponse.body.department.departmentName;
     });
   }
 
@@ -68,9 +74,68 @@ export class AddupdatestaffmodalComponent implements OnInit {
     this.mode = 'update';
   }
 
-  onSubmitAddDepartment(staffValue) {
-    this.event.emit('OK');
+  onFileChanged(event) {
+    this.staffImageFile = event.target.files[0] as File;
+    if (this.staffImageFile.size > 100000) {
+      this.translate.get('STAFF.ADDUPDATEDETAILMODAL.image.validation.error.fileSize', {fileSize: '100 Kb'}).subscribe(
+        fileSizeValidationError => {
+          this.imageErrorMessage = fileSizeValidationError;
+        });
+      return;
+    }
+    if (this.acceptedImageTypes.indexOf(this.staffImageFile.type) < 0) {
+      this.translate.get('STAFF.ADDUPDATEDETAILMODAL.image.validation.error.fileType', {fileTypes: 'Png, Jpg'}).subscribe(
+        fileTypeValidationError => {
+          this.imageErrorMessage = fileTypeValidationError;
+        });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (onloadEvent: any) => {
+      const imageBase64Path = onloadEvent.target.result.substr(onloadEvent.target.result.indexOf(',') + 1);
+      this.staffImageForSrc = this.createSafeResourceUrlForImage(imageBase64Path);
+    };
+    reader.readAsDataURL(this.staffImageFile);
+    this.imageErrorMessage = null;
+  }
+
+  onSubmitAddUpdateStaffForm() {
+    this.formData = new FormData();
+    this.formData.append('staff', new Blob([JSON.stringify(this.staff)], {type: 'application/json'}));
+    if (this.staffImageFile != null) {
+      this.formData.append('image', this.staffImageFile);
+    }
+    if (this.staffId != null) {
+      this.staffService.update(this.departmentId, this.staff.id, this.formData).subscribe(
+        updateResponse => {
+          if (updateResponse.status === 200) {
+            console.log(updateResponse.body);
+            this.event.emit('Updated');
+            this.translate.get('STAFF.ADDUPDATEDETAILMODAL.toastr.updateStaff.success.message',
+                               {firstName: this.staff.firstName, lastName: this.staff.lastName}).subscribe(
+              updateSuccessMessage => {
+              this.toastr.success(updateSuccessMessage);
+            });
+          } else {
+            console.log('Update failed.');
+            this.translate.get('STAFF.ADDUPDATEDETAILMODAL.toastr.updateStaff.error.message',
+                               {firstName: this.staff.firstName, lastName: this.staff.lastName}).subscribe(
+              updateErrorMessage => {
+              this.toastr.error(updateErrorMessage);
+            });
+          }
+        });
+    } else {
+      console.log('Add new staff');
+      this.event.emit('Added');
+    }
     this.closeModal();
+  }
+
+  onClickRemoveImage() {
+    this.staff.image = null;
+    this.staffImageForSrc = null;
+    this.staffImageFile = null;
   }
 
   onClickCancel() {
@@ -80,5 +145,9 @@ export class AddupdatestaffmodalComponent implements OnInit {
 
   closeModal() {
     this.bsModalRef.hide();
+  }
+
+  private createSafeResourceUrlForImage(imageBase64Url: string): SafeResourceUrl  {
+    return this.domSanitize.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + imageBase64Url);
   }
 }

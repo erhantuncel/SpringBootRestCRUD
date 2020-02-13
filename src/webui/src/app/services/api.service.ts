@@ -14,7 +14,7 @@ export class ApiService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-    })
+    }),
   };
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
@@ -36,7 +36,15 @@ export class ApiService {
     return this.http.put(
       environment.API_BASE_PATH + path,
       JSON.stringify(params),
-      this.httpOptions
+      this.httpOptions,
+    ).pipe(catchError(this.formatError));
+  }
+
+  putWithFormData(path: string, data: FormData): Observable<any> {
+    return this.http.put(
+      environment.API_BASE_PATH + path,
+      data,
+      {observe: 'response'}
     ).pipe(catchError(this.formatError));
   }
 

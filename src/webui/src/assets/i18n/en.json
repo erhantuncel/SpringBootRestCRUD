@@ -89,7 +89,15 @@
       "button.cancel": "Cancel",
       "button.update": "Update",
       "button.accept.add": "Add",
-      "button.accept.update": "Save"
+      "button.accept.update": "Save",
+      "button.image.select": "Select",
+      "button.image.remove": "Remove",
+      "image.validation.error.fileSize": "Maximum upload file size {{fileSize}}.",
+      "image.validation.error.fileType": "Allowed file types : {{fileTypes}}",
+      "toastr.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
+      "toastr.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
+      "invalid.message.required": "Must not be empty.",
+      "invalid.message.phone.pattern": "Must be {{numberCount}} numbers."
     }
   }
 }

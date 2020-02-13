@@ -89,7 +89,15 @@
       "button.cancel": "Vazgeç",
       "button.update": "Güncelle",
       "button.accept.add": "Ekle",
-      "button.accept.update": "Kaydet"
+      "button.accept.update": "Kaydet",
+      "button.image.select": "Seç",
+      "button.image.remove": "Kaldır",
+      "image.validation.error.fileSize": "En fazla {{fileSize}} boyutunda resim yükleyebilirsiniz.",
+      "image.validation.error.fileType": "İzin verilen dosya tipleri: {{fileTypes}}",
+      "toastr.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
+      "toastr.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
+      "invalid.message.required": "Boş olmamalı.",
+      "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
     }
 
   }
