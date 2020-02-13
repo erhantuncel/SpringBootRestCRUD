@@ -96,6 +96,8 @@
       "image.validation.error.fileType": "Allowed file types : {{fileTypes}}",
       "toastr.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
       "toastr.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
+      "toastr.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
+      "toastr.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
       "invalid.message.required": "Must not be empty.",
       "invalid.message.phone.pattern": "Must be {{numberCount}} numbers."
     }

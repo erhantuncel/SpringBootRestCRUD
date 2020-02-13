@@ -7,7 +7,7 @@
     "HEADER": {
       "NAVBAR": {
         "title": "Personel Bilgi Sistemi",
-        "link.department.label": "Departman",
+        "link.department.label": "Bölüm",
         "link.staff.label": "Personel"
       }
     },
@@ -20,7 +20,7 @@
 
   "DEPARTMENT": {
     "list.table.title.no": "No",
-    "list.table.title.department": "Departman",
+    "list.table.title.department": "Bölüm",
     "list.table.title.staffCount": "Personel Sayısı",
     "list.table.title.actions": "İşlemler",
     "list.table.row.button.update": "Güncelle",
@@ -28,31 +28,31 @@
     "list.table.label.entryCount1": "Sayfada",
     "list.table.label.entryCount2": "kayıt göster",
     "list.table.label.entryInformation": "{{totalEntry}} kayıttan {{rangeStart}}-{{rangeEnd}} arasındaki kayıtlar gösteriliyor.",
-    "toastr.department.not.found": "Departman bulunamadı.",
-    "button.addDepartment": "Departman Ekle",
+    "toastr.department.not.found": "Bölüm bulunamadı.",
+    "button.addDepartment": "Bölüm Ekle",
     "button.searchDepartment": "Ara",
     "ADDUPDATEDEPARTMENTMODAL": {
-      "title.add": "Departman Ekle",
-      "title.update": "Departman Güncelle",
+      "title.add": "Bölüm Ekle",
+      "title.update": "Bölüm Güncelle",
       "label.departmentId": "No",
-      "label.departmentName": "Departman",
+      "label.departmentName": "Bölüm",
       "invalid.message.required": "Boş olmamalı.",
       "invalid.message.minlength": "En az {{characterCount}} karakter olmalı.",
       "invalid.message.maxlength": "En fazla {{characterCount}} karakter olmalı.",
       "button.cancel": "Vazgeç",
       "button.add": "Ekle",
       "button.update": "Güncelle",
-      "toastr.addDepartment.success.message": "{{departmentName}} departmanı eklendi.",
-      "toastr.addDepartment.error.message": "{{departmentName}} departmanı eklenemedi.",
-      "toastr.updateDepartment.success.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellendi.",
-      "toastr.updateDepartment.error.message": "{{departmentId}} numaralı departman {{departmentName}} olarak güncellenemedi."
+      "toastr.addDepartment.success.message": "{{departmentName}} bölümü eklendi.",
+      "toastr.addDepartment.error.message": "{{departmentName}} bölümü eklenemedi.",
+      "toastr.updateDepartment.success.message": "{{departmentId}} numaralı bölüm {{departmentName}} olarak güncellendi.",
+      "toastr.updateDepartment.error.message": "{{departmentId}} numaralı bölüm {{departmentName}} olarak güncellenemedi."
     },
     "DELETECONFIRMATIONMODAL": {
-      "header.title": "Departman Silme Onay",
-      "warningMessage": "<strong>{{departmentId}}</strong> numaralı <strong>{{departmentName}}</strong> departmanını veritabanından silmek istiyor musunuz?",
-      "toastr.deleteDepartment.success.message": "{{departmentId}} numaralı {{departmentName}} departmanı silindi.",
-      "toastr.deleteDepartment.error.message": "{{departmentId}} numaralı {{departmentName}} departmanı silinemedi.",
-      "toastr.deleteDepartment.error.constraintViolation.message": "{{departmentId}} numaralı {{departmentName}} departmanında kayıtlı personel olduğundan silinemedi.",
+      "header.title": "Bölüm Silme Onay",
+      "warningMessage": "<strong>{{departmentId}}</strong> numaralı <strong>{{departmentName}}</strong> bölümünü veritabanından silmek istiyor musunuz?",
+      "toastr.deleteDepartment.success.message": "{{departmentId}} numaralı {{departmentName}} bölümü silindi.",
+      "toastr.deleteDepartment.error.message": "{{departmentId}} numaralı {{departmentName}} bölümü silinemedi.",
+      "toastr.deleteDepartment.error.constraintViolation.message": "{{departmentId}} numaralı {{departmentName}} bölümüne kayıtlı personel olduğundan silinemedi.",
       "button.yes": "Evet",
       "button.no": "Hayır"
     }
@@ -62,7 +62,7 @@
     "list.table.title.no": "No",
     "list.table.title.firstName": "Ad",
     "list.table.title.lastName": "Soyad",
-    "list.table.title.departmentName": "Departman",
+    "list.table.title.departmentName": "Bölüm",
     "list.table.title.registeredDate": "Kayıt Zamanı",
     "list.table.title.actions": "İşlemler",
     "list.table.row.button.detail": "Detay",
@@ -85,7 +85,7 @@
       "label.lastName": "Soyad",
       "label.phone": "Telefon",
       "label.email": "E-mail",
-      "label.department": "Departman",
+      "label.department": "Bölüm",
       "button.cancel": "Vazgeç",
       "button.update": "Güncelle",
       "button.accept.add": "Ekle",
@@ -96,6 +96,8 @@
       "image.validation.error.fileType": "İzin verilen dosya tipleri: {{fileTypes}}",
       "toastr.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
       "toastr.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
+      "toastr.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
+      "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
       "invalid.message.required": "Boş olmamalı.",
       "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
     }

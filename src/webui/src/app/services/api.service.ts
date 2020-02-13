@@ -32,6 +32,14 @@ export class ApiService {
     ).pipe(catchError(this.formatError));
   }
 
+  postWithFormData(path: string, data: FormData): Observable<any> {
+    return this.http.post(
+      environment.API_BASE_PATH + path,
+      data,
+      {observe: 'response'}
+    ).pipe(catchError(this.formatError));
+  }
+
   put(path: string, params: HttpParams = new HttpParams()): Observable<any> {
     return this.http.put(
       environment.API_BASE_PATH + path,

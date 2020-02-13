@@ -40,12 +40,17 @@ export class AddupdatestaffmodalComponent implements OnInit {
 
   ngOnInit() {
     this.staff = new Staff();
-    this.staff.id = this.staffId;
     this.staff.department = new Department();
     this.staff.department.id = this.departmentId;
     this.populateDepartments();
-    this.populateStaffDetails();
-    this.mode = 'detail';
+    console.log('staffId = ', this.staffId);
+    if ( this.staffId !== undefined ) {
+      this.staff.id = this.staffId;
+      this.populateStaffDetails();
+      this.mode = 'detail';
+    } else {
+      this.mode = 'add';
+    }
   }
 
   populateDepartments() {
@@ -117,7 +122,6 @@ export class AddupdatestaffmodalComponent implements OnInit {
               this.toastr.success(updateSuccessMessage);
             });
           } else {
-            console.log('Update failed.');
             this.translate.get('STAFF.ADDUPDATEDETAILMODAL.toastr.updateStaff.error.message',
                                {firstName: this.staff.firstName, lastName: this.staff.lastName}).subscribe(
               updateErrorMessage => {
@@ -126,8 +130,24 @@ export class AddupdatestaffmodalComponent implements OnInit {
           }
         });
     } else {
-      console.log('Add new staff');
-      this.event.emit('Added');
+      console.log(this.staff);
+      this.staffService.create(this.staff.department.id, this.formData).subscribe(addResponse => {
+        console.log(addResponse);
+        if (addResponse.status === 200) {
+          this.event.emit('Added');
+          this.translate.get('STAFF.ADDUPDATEDETAILMODAL.toastr.addStaff.success.message',
+                             {firstName: this.staff.firstName, lastName: this.staff.lastName}).subscribe(
+            addSuccessMessage => {
+            this.toastr.success(addSuccessMessage);
+          });
+        } else {
+          this.translate.get('STAFF.ADDUPDATEDETAILMODAL.toastr.addStaff.error.message',
+                             {firstName: this.staff.firstName, lastName: this.staff.lastName}).subscribe(
+            addErrorMessage => {
+            this.toastr.error(addErrorMessage);
+          });
+        }
+      });
     }
     this.closeModal();
   }

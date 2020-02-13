@@ -6,7 +6,7 @@
     </button>
   </div>
   <div class="modal-body m-2">
-    <div class="row">
+    <div class="row pr-2">
       <div class="col-lg-4 text-center pb-4">
         <div class="row">
           <div class="col-12">
@@ -42,7 +42,7 @@
                     [(ngModel)]="staff.id" #inputId=ngModel readonly>
           </div>
         </div>
-        <div class="form-group row mb-1">
+        <div class="form-group row mb-1" *ngIf="mode !== 'add'">
           <label for="inputCreateDate" class="col-3 col-form-label">
             {{ "STAFF.ADDUPDATEDETAILMODAL.label.staffCreateDate" | translate}}
           </label>
@@ -95,7 +95,7 @@
           </label>
           <div class="col-9">
             <input type="text" id="inputPhone" name="inputPhone" [(ngModel)]="staff.phone" #inputPhone=ngModel
-                  [ngClass]="{'form-control': mode === 'update',
+                  [ngClass]="{'form-control': mode !== 'detail',
                               'form-control-plaintext': mode === 'detail',
                               'is-invalid': inputPhone.invalid && (inputPhone.dirty || inputPhone.touched)
                   }"
@@ -103,7 +103,7 @@
                   required pattern="[0-9]{10}">
             <div class="invalid-feedback" *ngIf="inputPhone.invalid && (inputPhone.dirty || inputPhone.touched)">
               <div *ngIf="inputPhone.errors.pattern">
-                {{ "STAFF.ADDUPDATEDETAILMODAL.invalid.message.phone.pattern" | translate: {numberCount: 10} }}
+                {{ "STAFF.ADDUPDATEDETAILMODAL.invalid.message.phone.pattern" | translate: {numberCount:10} }}
               </div>
               <div *ngIf="inputPhone.errors.required">
                 {{ "STAFF.ADDUPDATEDETAILMODAL.invalid.message.required" | translate }}
@@ -117,7 +117,7 @@
           </label>
           <div class="col-9">
             <input type="text" id="inputEmail" name="inputEmail" [(ngModel)]="staff.email" #inputEmail=ngModel
-                  [ngClass]="{'form-control': mode === 'update',
+                  [ngClass]="{'form-control': mode !== 'detail',
                               'form-control-plaintext': mode === 'detail',
                               'is-invalid': inputEmail.invalid && (inputEmail.dirty || inputEmail.touched)}"
                   [readOnly]="mode === 'detail'? true : false"
@@ -132,7 +132,7 @@
             <input type="text" class="form-control-plaintext" id="inputDepartment" name="inputDepartment" readonly
                     *ngIf="mode === 'detail'" [(ngModel)]="staff.department.departmentName" #inputDepartment = ngModel>
             <select class="form-control custom-select" id="selectDepartment" name="selectDepartment"
-                    *ngIf="mode === 'update'" [(ngModel)]="staff.department.id" #selectDepartment = ngModel>
+                    *ngIf="mode !== 'detail'" [(ngModel)]="staff.department.id" #selectDepartment = ngModel>
               <option *ngFor="let department of departments" [value]="department.id" >
                 {{ department.departmentName }}
               </option>
@@ -143,7 +143,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-dark pull-right" (click)="changeModeToUpdate()" *ngIf="mode !== 'update'"  >
+    <button type="button" class="btn btn-dark pull-right" (click)="changeModeToUpdate()" *ngIf="mode === 'detail'"  >
       {{ "STAFF.ADDUPDATEDETAILMODAL.button.update" | translate }}
     </button>
     <button class="btn btn-danger" (click)="onClickCancel()" type="button" *ngIf="mode !== 'detail'" >
