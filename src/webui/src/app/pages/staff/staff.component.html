@@ -69,10 +69,12 @@
               <td class="align-middle">{{staff.department.departmentName}}</td>
               <td class="align-middle">{{staff.createDate}}</td>
               <td class="align-middle" style="width: 17%;">
-                <button type="button" class="btn btn-dark float-sm-right" >
+                <button type="button" class="btn btn-dark float-sm-right"
+                        (click)="showDeleteStaffConfirmationModalComponent(staff.id, staff.firstName, staff.lastName)" >
                   {{ "STAFF.list.table.row.button.delete" | translate }}
                 </button>
-                <button type="button" class="btn btn-dark mr-1 float-sm-right" (click)="showAddUpdateStaffModalComponent(staff.id)" >
+                <button type="button" class="btn btn-dark mr-1 float-sm-right"
+                        (click)="showAddUpdateStaffModalComponent(staff.id)" >
                   {{ "STAFF.list.table.row.button.detail" | translate }}
                 </button>
               </td>

@@ -1,3 +1,5 @@
+import { ConfirmationmodalComponent } from './../../shared/confirmationmodal/confirmationmodal.component';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { AddupdatestaffmodalComponent } from './addupdatestaffmodal/addupdatestaffmodal.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DepartmentService } from './../../services/shared/department.service';
@@ -39,12 +41,14 @@ export class StaffComponent implements OnInit {
   keywordInputValue: string;
 
   addUpdateStaffModal: BsModalRef;
+  deleteStaffConfirmationModal: BsModalRef;
 
   constructor(private staffService: StaffService,
               private departmentService: DepartmentService,
               private toastr: ToastrService,
               private translate: TranslateService,
-              private modalService: BsModalService) { }
+              private modalService: BsModalService,
+              private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.populateDepartments();
@@ -73,6 +77,7 @@ export class StaffComponent implements OnInit {
         this.config.currentPage = page;
         this.config.totalItems = response.body.totalElements;
       } else {
+        this.data = [];
         this.translate.get('STAFF.toastr.staff.not.found').subscribe(getStaffPageResponse => {
           this.toastr.error(getStaffPageResponse);
         });
@@ -128,6 +133,56 @@ export class StaffComponent implements OnInit {
         this.getPage(1);
       } else if (result === 'Cancel') {
         console.log('Cancel button clicked.');
+      }
+    });
+  }
+
+  showDeleteStaffConfirmationModalComponent(staffIdFromTable: number, staffFirstName: string, staffLastName: string) {
+    let headerTitleTranslated: string;
+    let warningMessageTranslated: SafeHtml;
+
+    this.translate.get('STAFF.DELETECONFIRMATIONMODAL.header.title').subscribe(headerTitleResponse => {
+      headerTitleTranslated = headerTitleResponse;
+    });
+    this.translate.get('STAFF.DELETECONFIRMATIONMODAL.warningMessage',
+                       {staffId: staffIdFromTable, firstName: staffFirstName, lastName: staffLastName})
+                       .subscribe(warningMessageResponse => {
+      warningMessageTranslated = this.sanitizer.bypassSecurityTrustHtml(warningMessageResponse);
+    });
+
+    const config = {
+      initialState: {
+        departmentId: this.departmentId,
+        staffId: staffIdFromTable,
+        headerTitleText: headerTitleTranslated,
+        warningMessage: warningMessageTranslated
+      },
+      backdrop: true,
+      ignoreBackdropClick: true,
+    };
+
+    this.deleteStaffConfirmationModal = this.modalService.show(ConfirmationmodalComponent, config);
+    this.deleteStaffConfirmationModal.content.onClose.subscribe((isYes: boolean) => {
+      if (isYes) {
+        this.staffService.delete(this.departmentId, staffIdFromTable).subscribe(deleteResponse => {
+          console.log(deleteResponse);
+          if (deleteResponse.status === 200) {
+            this.translate.get('STAFF.DELETECONFIRMATIONMODAL.toastr.deleteDepartment.success.message',
+                               {staffId: staffIdFromTable, firstName: staffFirstName, lastName: staffLastName})
+                               .subscribe(deleteSuccessResponse => {
+              this.toastr.success(deleteSuccessResponse);
+            });
+          } else {
+            this.translate.get('STAFF.DELETECONFIRMATIONMODAL.toastr.deleteDepartment.error.message',
+                               {staffId: staffIdFromTable, firstName: staffFirstName, lastName: staffLastName})
+                               .subscribe(deleteErrorResponse => {
+              this.toastr.error(deleteErrorResponse);
+            });
+          }
+          this.getPage(1);
+        });
+      } else {
+        console.log('No button is clicked.');
       }
     });
   }

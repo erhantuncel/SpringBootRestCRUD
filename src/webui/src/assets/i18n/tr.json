@@ -100,6 +100,12 @@
       "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
       "invalid.message.required": "Boş olmamalı.",
       "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
+    },
+    "DELETECONFIRMATIONMODAL": {
+      "header.title": "Personel Silme Onay",
+      "warningMessage": "<strong>{{staffId}}</strong> numaralı <strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
+      "toastr.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
+      "toastr.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
     }
 
   }
