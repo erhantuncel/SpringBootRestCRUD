@@ -1,15 +1,17 @@
 DROP TABLE IF EXISTS staffs;
 DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS staffs_id_seq;
 DROP SEQUENCE IF EXISTS departments_id_seq;
+DROP SEQUENCE IF EXISTS users_id_seq;
 CREATE TABLE departments (
-	id serial,
+	id bigserial,
 	department_name VARCHAR(100) NOT NULL,
 	PRIMARY KEY (id)
 );
 
 CREATE TABLE staffs (
-	id serial,
+	id bigserial,
 	first_name VARCHAR(40) NOT NULL,
 	last_name VARCHAR(40) NOT NULL,
 	phone VARCHAR(10) NOT NULL,
@@ -20,6 +22,15 @@ CREATE TABLE staffs (
 	PRIMARY KEY (id),
 	FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );
+
+CREATE TABLE users (
+	id bigserial,
+	user_name VARCHAR(40) NOT NUll,
+	password VARCHAR(200) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+INSERT INTO users (user_name, password) VALUES ('admin', '$2y$12$JJ26Ir75BOI5pZhlWa6wZ.IL/.IxHxUd9n1DPZ7OqbhpNE6PX6ZB6');
 
 INSERT INTO departments (department_name) VALUES ('Üretim');
 INSERT INTO departments (department_name) VALUES ('AR-GE');
