@@ -11,4 +11,8 @@ public final class ApiPaths {
 	public static final class PathForStaffController {
 		public static final String staffs = BASE_PATH + "/departments/{departmentId}/staffs";
 	}
+	
+	public static final class PathForAuthenticationController {
+		public static final String token = BASE_PATH + "/token";
+	}
 }
