@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit {
   @ViewChild('loginForm', {static: true}) public loginForm: NgForm;
   user: User;
   returnUrl: string;
-  error = '';
 
   constructor(private toastr: ToastrService,
               private route: ActivatedRoute,
@@ -45,7 +44,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate([this.returnUrl]);
       },
       error => {
-        this.error = error;
         if (error.error.type === 'BadCredentialsException') {
           this.translate.get('LOGIN.toastr.error.bad.credentials').subscribe(errorResponse => {
             this.toastr.error(errorResponse);
