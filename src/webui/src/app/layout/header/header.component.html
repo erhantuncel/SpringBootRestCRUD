@@ -21,7 +21,9 @@
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item active">
-          <!-- <a class="btn btn-success mr-1" href="/addStaff" role="button">{{ "TEMPLATE.HEADER.NAVBAR.button.add.staff" | translate }}</a> -->
+          <a class="btn btn-outline-light mr-1" [routerLink]="['/login']" role="button">
+            {{ "TEMPLATE.HEADER.NAVBAR.button.logout" | translate }}
+          </a>
         </li>
       </ul>
     </div>

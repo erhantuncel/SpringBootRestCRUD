@@ -8,7 +8,8 @@
       "NAVBAR": {
         "title": "Personel Bilgi Sistemi",
         "link.department.label": "Bölüm",
-        "link.staff.label": "Personel"
+        "link.staff.label": "Personel",
+        "button.logout": "Çıkış"
       }
     },
 
@@ -16,6 +17,15 @@
       "link.turkish": "Türkçe",
       "link.english": "İngilizce"
     }
+  },
+
+  "LOGIN": {
+    "card.header.label": "Personel Bilgi Sistemi",
+    "input.label.userName": "Kullanıcı Adı",
+    "input.label.password": "Şifre",
+    "button.label": "Giriş",
+    "toastr.error.not.empty": "Form alanlarını doldurmalısınız.",
+    "toastr.error.bad.credentials": "Kullanıcı adı veya şifre hatalı."
   },
 
   "DEPARTMENT": {

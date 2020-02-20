@@ -8,7 +8,8 @@
       "NAVBAR": {
         "title": "Staff Information System",
         "link.department.label": "Department",
-        "link.staff.label": "Staff"
+        "link.staff.label": "Staff",
+        "button.logout": "Logout"
       }
     },
 
@@ -16,6 +17,15 @@
       "link.turkish": "Turkish",
       "link.english": "English"
     }
+  },
+
+  "LOGIN": {
+    "card.header.label": "Staff Information System",
+    "input.label.userName": "Username",
+    "input.label.password": "Password",
+    "button.label": "Login",
+    "toastr.error.not.empty": "Form fields must not be empty.",
+    "toastr.error.bad.credentials": "Username or password is wrong."
   },
 
   "DEPARTMENT": {
