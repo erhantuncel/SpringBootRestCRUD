@@ -40,7 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// -- Swagger UI v3 (OpenAPI)
 			"/v3/api-docs/**",
 			"/swagger-ui/**",
-			"/rest/token"
+			"/rest/token",
+			// -- Actuator for health check
+			"/actuator/health"
 	};
 	
 	@Override

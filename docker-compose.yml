@@ -13,18 +13,29 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db/data:/var/lib/postgresql/data
       - ./db/profileImages:/profileImages
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      timeout: 20s
+      retries: 10
   backend:
     restart: always
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
     build: ./backend
     container_name: spring-boot-backend
     ports:
       - 8080:8080
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
   frontend:
     restart: always
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     build: ./frontend
     container_name: angular-frontend
     ports:
